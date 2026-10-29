@@ -2,14 +2,14 @@ export type Language = 'en' | 'pa';
 
 export const TRANSLATIONS = {
   en: {
-    appTitle: 'AegisSOC',
-    appSubtitle: 'Enterprise Threat Intelligence & Log Analyzer',
+    appTitle: 'Log Analyzer by Kunal',
+    appSubtitle: 'Enterprise Threat Intelligence & SOC Log Analyzer',
     navDashboard: 'SOC Dashboard',
     navCollector: 'Log Collector Hub',
     navLogs: 'Log Explorer',
     navIncidents: 'Incidents & Triage',
     navRules: 'Detection Rules',
-    navCopilot: 'AI Threat Copilot',
+    navAudit: 'Audit Trail',
 
     // Top Bar
     threatLevel: 'Threat Level',
@@ -17,6 +17,9 @@ export const TRANSLATIONS = {
     languageSwitch: 'ਪੰਜਾਬੀ',
     activeIncidentsCount: 'Active Incidents',
     systemStatus: 'Collector Agent Online',
+    themeToggle: 'Theme',
+    dlpToggle: 'DLP Masking',
+    exportPdfButton: 'Export Compliance PDF Report',
 
     // Dashboard
     kpiTotalEvents: 'Total Logs Ingested',
@@ -119,14 +122,14 @@ export const TRANSLATIONS = {
     info: 'Clean / Info'
   },
   pa: {
-    appTitle: 'ਏਜਿਸ SOC (AegisSOC)',
+    appTitle: 'ਲੌਗ ਐਨਾਲਾਈਜ਼ਰ ਬਾਈ ਕੁਨਾਲ',
     appSubtitle: 'ਸੁਰੱਖਿਆ ਸੰਚਾਲਨ ਕੇਂਦਰ (SOC) ਲੌਗ ਐਨਾਲਾਈਜ਼ਰ ਅਤੇ ਕਲੈਕਟਰ',
     navDashboard: 'SOC ਡੈਸ਼ਬੋਰਡ',
     navCollector: 'ਲੌਗ ਕਲੈਕਟਰ ਹੱਬ',
     navLogs: 'ਲੌਗ ਐਕਸਪਲੋਰਰ',
     navIncidents: 'ਘਟਨਾਵਾਂ ਤੇ ਜਾਂਚ (Triage)',
     navRules: 'ਡਿਟੈਕਸ਼ਨ ਨਿਯਮ',
-    navCopilot: 'AI ਥ੍ਰੈਟ ਕੋਪਾਇਲਟ',
+    navAudit: 'ਆਡਿਟ ਇਤਿਹਾਸ',
 
     // Top Bar
     threatLevel: 'ਖਤਰਾ ਪੱਧਰ',
@@ -134,6 +137,9 @@ export const TRANSLATIONS = {
     languageSwitch: 'English',
     activeIncidentsCount: 'ਸਰਗਰਮ ਘਟਨਾਵਾਂ',
     systemStatus: 'ਕਲੈਕਟਰ ਏਜੰਟ ਆਨਲਾਈਨ',
+    themeToggle: 'ਥੀਮ',
+    dlpToggle: 'ਸੈਂਸਿਟਿਵ ਡੇਟਾ ਮਾਸਕਿੰਗ',
+    exportPdfButton: 'ਕੰਪਲਾਇੰਸ PDF ਰਿਪੋਰਟ ਡਾਊਨਲੋਡ',
 
     // Dashboard
     kpiTotalEvents: 'ਕੁੱਲ ਇਕੱਠੇ ਕੀਤੇ ਲੌਗਸ',

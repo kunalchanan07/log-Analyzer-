@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { TopBar } from './components/TopBar';
 import { SocDashboard } from './components/SocDashboard';
 import { LogCollector } from './components/LogCollector';
@@ -6,6 +6,8 @@ import { LogExplorer } from './components/LogExplorer';
 import { IncidentTriage } from './components/IncidentTriage';
 import { RulesManager } from './components/RulesManager';
 import { LogDetailModal } from './components/LogDetailModal';
+import { SecurityAlertModal } from './components/SecurityAlertModal';
+import { AuditHistory, AuditRecord } from './components/AuditHistory';
 import { 
   LogEntry, 
   Incident, 
@@ -17,21 +19,77 @@ import {
   parseLogLine 
 } from './utils/detectionEngine';
 import { Language } from './utils/i18n';
+import { redactSensitiveData } from './utils/masking';
+import { generateIncidentPdfReport } from './utils/pdfReport';
 import { X, Radio } from 'lucide-react';
 
 export default function App() {
   const [lang, setLang] = useState<Language>('en');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'collector' | 'explorer' | 'incidents' | 'rules'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'collector' | 'explorer' | 'incidents' | 'rules' | 'audit'>('dashboard');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [dlpEnabled, setDlpEnabled] = useState<boolean>(true);
+
+  // Sync theme class with HTML document element
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
   
   // State
   const [logs, setLogs] = useState<LogEntry[]>(() => generateSampleLogs());
   const [rules, setRules] = useState<DetectionRule[]>(DEFAULT_DETECTION_RULES);
   const [selectedLog, setSelectedLog] = useState<LogEntry | null>(null);
+  const [alertThreatLog, setAlertThreatLog] = useState<LogEntry | null>(null);
   const [isCollectorDrawerOpen, setIsCollectorDrawerOpen] = useState(false);
   const [isStreaming, setIsStreaming] = useState(true);
   const [streamSpeed, setStreamSpeed] = useState<number>(1);
   const [blockedIps, setBlockedIps] = useState<Set<string>>(new Set(['185.220.101.5']));
   const [isolatedHosts, setIsolatedHosts] = useState<Set<string>>(new Set());
+
+  // Security Audit History Records
+  const [auditRecords, setAuditRecords] = useState<AuditRecord[]>([
+    {
+      id: 'AUD-1001',
+      timestamp: new Date(Date.now() - 1000 * 60 * 65).toISOString(),
+      actionType: 'ingest',
+      actor: 'system.daemon',
+      target: 'syslog-collector-01',
+      details: 'Started continuous syslog and CEF stream receiver on port 514 UDP/TCP.',
+      status: 'success'
+    },
+    {
+      id: 'AUD-1002',
+      timestamp: new Date(Date.now() - 1000 * 60 * 42).toISOString(),
+      actionType: 'block_ip',
+      actor: 'kunal.soc.lead',
+      target: '185.220.101.5',
+      details: 'Automated perimeter firewall block enacted following critical SQL injection attempt on prod-web-ingress.',
+      status: 'warning'
+    },
+    {
+      id: 'AUD-1003',
+      timestamp: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
+      actionType: 'incident_created',
+      actor: 'detection.engine',
+      target: 'INC-2026-081',
+      details: 'Triaged automated high-severity incident: Database Exfiltration via SQLi (MITRE T1190).',
+      status: 'alert'
+    },
+    {
+      id: 'AUD-1004',
+      timestamp: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
+      actionType: 'report_export',
+      actor: 'kunal.soc.lead',
+      target: 'Executive Summary',
+      details: 'Generated and signed SOC 2 / ISO 27001 executive compliance PDF report.',
+      status: 'success'
+    }
+  ]);
 
   // Incidents
   const [incidents, setIncidents] = useState<Incident[]>([
@@ -97,14 +155,53 @@ export default function App() {
     }
   ]);
 
-  // Append new logs to state
+  // Sensitive data DLP redaction layer: when DLP is active, redact all raw payloads
+  const displayedLogs = useMemo(() => {
+    if (!dlpEnabled) return logs;
+    return logs.map(log => ({
+      ...log,
+      raw: redactSensitiveData(log.raw)
+    }));
+  }, [logs, dlpEnabled]);
+
+  // Append new logs to state and trigger pop-up alert if critical/high malicious event is found
   const handleIngestLogs = (newEntries: LogEntry[]) => {
     setLogs(prev => [...newEntries, ...prev].slice(0, 500));
+
+    // Check for high-threat entries to trigger immediate warning popup
+    const urgentThreat = newEntries.find(e => (e.isMalicious || e.isSuspicious) && (e.severity === 'critical' || e.severity === 'high'));
+    if (urgentThreat && !alertThreatLog) {
+      setAlertThreatLog(urgentThreat);
+    }
+
+    // Record Ingestion Audit Entry
+    if (newEntries.length > 0) {
+      const maliciousCount = newEntries.filter(e => e.isMalicious).length;
+      const auditEntry: AuditRecord = {
+        id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+        timestamp: new Date().toISOString(),
+        actionType: 'ingest',
+        actor: 'ingest.pipeline',
+        target: `${newEntries.length} log events`,
+        details: `Ingested batch of ${newEntries.length} records. Detected ${maliciousCount} malicious and ${newEntries.filter(e => e.isSuspicious).length} suspicious events.`,
+        status: maliciousCount > 0 ? 'alert' : 'success'
+      };
+      setAuditRecords(prev => [auditEntry, ...prev.slice(0, 100)]);
+    }
   };
 
   // Clear all logs
   const handleClearLogs = () => {
     setLogs([]);
+    const auditEntry: AuditRecord = {
+      id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+      timestamp: new Date().toISOString(),
+      actionType: 'ingest',
+      actor: 'kunal.soc.lead',
+      details: 'Collector active memory buffer cleared by operator.',
+      status: 'warning'
+    };
+    setAuditRecords(prev => [auditEntry, ...prev]);
   };
 
   // Attack scenario simulation
@@ -160,14 +257,16 @@ export default function App() {
     const parsed = sampleLines.map(line => parseLogLine(line));
     handleIngestLogs(parsed);
 
-    // If critical threat, create or update incident
-    const criticalLogs = parsed.filter(p => p.severity === 'critical');
+    // If critical threat, create or update incident and pop alert
+    const criticalLogs = parsed.filter(p => p.severity === 'critical' || p.severity === 'high');
     if (criticalLogs.length > 0) {
       const first = criticalLogs[0];
+      setAlertThreatLog(first);
+
       const newInc: Incident = {
         id: `INC-2026-${Math.floor(100 + Math.random() * 900)}`,
         title: first.ruleMatched?.name || 'Active Critical Security Breach Attempt',
-        severity: 'critical',
+        severity: first.severity,
         status: 'new',
         createdTime: now,
         updatedTime: now,
@@ -185,6 +284,17 @@ export default function App() {
         logIds: parsed.map(p => p.id)
       };
       setIncidents(prev => [newInc, ...prev]);
+
+      const auditEntry: AuditRecord = {
+        id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+        timestamp: now,
+        actionType: 'incident_created',
+        actor: 'simulation.engine',
+        target: newInc.id,
+        details: `Simulated attack scenario "${scenarioType}" injected: ${newInc.title} targeting ${newInc.targetHost}.`,
+        status: 'alert'
+      };
+      setAuditRecords(prev => [auditEntry, ...prev]);
     }
   };
 
@@ -201,8 +311,8 @@ export default function App() {
         `prod-api-ingress nginx: 172.16.0.4 - - [${new Date().toISOString()}] "POST /graphql HTTP/1.1" 200 480 "-" "ApolloClient"`
       ];
 
-      // 10% chance to emit suspicious probe
-      if (Math.random() < 0.12) {
+      // 8% chance to emit suspicious probe
+      if (Math.random() < 0.08) {
         benignTemplates.push(
           `185.220.101.5 - - [${new Date().toISOString()}] "GET /?id=1%20UNION%20SELECT%20null,password%20FROM%20users-- HTTP/1.1" 200 8400 "-" "sqlmap/1.6"`
         );
@@ -218,11 +328,41 @@ export default function App() {
 
   // Actions
   const handleBlockIp = (ip: string) => {
-    setBlockedIps(prev => new Set(prev).add(ip));
+    setBlockedIps(prev => {
+      const next = new Set(prev);
+      next.add(ip);
+      return next;
+    });
+
+    const auditEntry: AuditRecord = {
+      id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+      timestamp: new Date().toISOString(),
+      actionType: 'block_ip',
+      actor: 'kunal.soc.lead',
+      target: ip,
+      details: `Perimeter firewall ACL rule applied: Dropping all traffic from ${ip}.`,
+      status: 'warning'
+    };
+    setAuditRecords(prev => [auditEntry, ...prev]);
   };
 
   const handleIsolateHost = (host: string) => {
-    setIsolatedHosts(prev => new Set(prev).add(host));
+    setIsolatedHosts(prev => {
+      const next = new Set(prev);
+      next.add(host);
+      return next;
+    });
+
+    const auditEntry: AuditRecord = {
+      id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+      timestamp: new Date().toISOString(),
+      actionType: 'isolate_host',
+      actor: 'kunal.soc.lead',
+      target: host,
+      details: `Endpoint quarantined from enterprise network: Host ${host} isolated via EDR agent.`,
+      status: 'alert'
+    };
+    setAuditRecords(prev => [auditEntry, ...prev]);
   };
 
   const handleCreateIncidentFromLog = (log: LogEntry) => {
@@ -246,24 +386,93 @@ export default function App() {
       logIds: [log.id]
     };
     setIncidents(prev => [newInc, ...prev]);
+
+    const auditEntry: AuditRecord = {
+      id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+      timestamp: new Date().toISOString(),
+      actionType: 'incident_created',
+      actor: 'kunal.soc.lead',
+      target: newInc.id,
+      details: `Operator manually escalated incident ${newInc.id} from log entry on ${log.sourceHost}.`,
+      status: 'warning'
+    };
+    setAuditRecords(prev => [auditEntry, ...prev]);
+
     setActiveTab('incidents');
     setSelectedLog(null);
   };
 
   const handleToggleRule = (ruleId: string) => {
     setRules(prev =>
-      prev.map(r => (r.id === ruleId ? { ...r, enabled: !r.enabled } : r))
+      prev.map(r => {
+        if (r.id === ruleId) {
+          const nextState = !r.enabled;
+          const auditEntry: AuditRecord = {
+            id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+            timestamp: new Date().toISOString(),
+            actionType: 'rule_toggle',
+            actor: 'kunal.soc.lead',
+            target: r.id,
+            details: `Detection rule ${r.id} (${r.name}) ${nextState ? 'enabled' : 'disabled'}.`,
+            status: 'success'
+          };
+          setAuditRecords(recs => [auditEntry, ...recs]);
+          return { ...r, enabled: nextState };
+        }
+        return r;
+      })
     );
   };
 
   const handleAddRule = (newRule: DetectionRule) => {
     setRules(prev => [newRule, ...prev]);
+    const auditEntry: AuditRecord = {
+      id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+      timestamp: new Date().toISOString(),
+      actionType: 'rule_toggle',
+      actor: 'kunal.soc.lead',
+      target: newRule.id,
+      details: `Created new custom detection signature: ${newRule.name} (Severity: ${newRule.severity}).`,
+      status: 'success'
+    };
+    setAuditRecords(prev => [auditEntry, ...prev]);
   };
 
   const handleUpdateIncidentStatus = (incidentId: string, newStatus: Incident['status']) => {
     setIncidents(prev =>
       prev.map(i => (i.id === incidentId ? { ...i, status: newStatus, updatedTime: new Date().toISOString() } : i))
     );
+    const auditEntry: AuditRecord = {
+      id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+      timestamp: new Date().toISOString(),
+      actionType: 'incident_created',
+      actor: 'kunal.soc.lead',
+      target: incidentId,
+      details: `Incident ${incidentId} workflow status updated to "${newStatus}".`,
+      status: newStatus === 'resolved' ? 'success' : 'warning'
+    };
+    setAuditRecords(prev => [auditEntry, ...prev]);
+  };
+
+  // Executive Compliance PDF Report Export
+  const handleExportPdfReport = () => {
+    generateIncidentPdfReport(incidents, {
+      analystName: 'Kunal (Lead SOC Analyst)',
+      organization: 'Global Enterprise SOC & Cyber Defense Center',
+      complianceStandard: 'SOC 2 Type II / ISO 27001:2022 / NIST SP 800-61 Rev 2'
+    });
+
+    const highSeverityCount = incidents.filter(i => i.severity === 'critical' || i.severity === 'high').length;
+    const auditEntry: AuditRecord = {
+      id: `AUD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+      timestamp: new Date().toISOString(),
+      actionType: 'report_export',
+      actor: 'kunal.soc.lead',
+      target: 'Executive Incident Compliance Report',
+      details: `Official PDF compliance report downloaded documenting ${highSeverityCount} high-severity incidents for external audit and compliance records.`,
+      status: 'success'
+    };
+    setAuditRecords(prev => [auditEntry, ...prev]);
   };
 
   const criticalIncidentCount = incidents.filter(i => i.severity === 'critical' && i.status !== 'resolved').length;
@@ -271,7 +480,11 @@ export default function App() {
   const suspiciousCount = logs.filter(l => l.isSuspicious).length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className={`min-h-screen flex flex-col transition-colors duration-200 ${
+      theme === 'dark' 
+        ? 'bg-slate-950 text-slate-100 dark' 
+        : 'bg-slate-50 text-slate-900 light'
+    }`}>
       {/* Top Bar adhering to 3-zone standard */}
       <TopBar
         activeTab={activeTab}
@@ -281,13 +494,18 @@ export default function App() {
         onOpenCollectorDrawer={() => setIsCollectorDrawerOpen(true)}
         criticalIncidentCount={criticalIncidentCount}
         isStreaming={isStreaming}
+        theme={theme}
+        setTheme={setTheme}
+        dlpEnabled={dlpEnabled}
+        setDlpEnabled={setDlpEnabled}
+        onExportPdfReport={handleExportPdfReport}
       />
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {activeTab === 'dashboard' && (
           <SocDashboard
-            logs={logs}
+            logs={displayedLogs}
             lang={lang}
             onSelectLog={(log) => setSelectedLog(log)}
             onNavigateToExplorer={() => setActiveTab('explorer')}
@@ -315,7 +533,7 @@ export default function App() {
 
         {activeTab === 'explorer' && (
           <LogExplorer
-            logs={logs}
+            logs={displayedLogs}
             lang={lang}
             onSelectLog={(log) => setSelectedLog(log)}
           />
@@ -328,6 +546,7 @@ export default function App() {
             onUpdateStatus={handleUpdateIncidentStatus}
             onBlockIp={handleBlockIp}
             blockedIps={blockedIps}
+            onExportPdfReport={handleExportPdfReport}
           />
         )}
 
@@ -339,9 +558,16 @@ export default function App() {
             onAddRule={handleAddRule}
           />
         )}
+
+        {activeTab === 'audit' && (
+          <AuditHistory
+            records={auditRecords}
+            lang={lang}
+          />
+        )}
       </main>
 
-      {/* Side-Panel Log Ingest Drawer (Directly answering "ਜਿਹੜਾ ਲੋਗਸ ਨੂੰ ਇੱਕ ਸਾਈਡ ਤੇ ਇਕੱਠਾ ਕਰ ਸਕੇ ਉਹਦਾ ਅਲੱਗ ਹੋਵੇ") */}
+      {/* Side-Panel Log Ingest Drawer */}
       {isCollectorDrawerOpen && (
         <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/70 backdrop-blur-sm animate-in fade-in">
           <div className="w-full max-w-2xl bg-slate-900 border-l border-slate-800 h-full p-6 overflow-y-auto space-y-6 shadow-2xl">
@@ -354,7 +580,7 @@ export default function App() {
               </div>
               <button
                 onClick={() => setIsCollectorDrawerOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
                 aria-label="Close drawer"
               >
                 <X className="w-5 h-5" />
@@ -395,18 +621,35 @@ export default function App() {
         />
       )}
 
+      {/* High-Severity Security Alert Pop-Up Modal */}
+      {alertThreatLog && (
+        <SecurityAlertModal
+          threatLog={alertThreatLog}
+          onClose={() => setAlertThreatLog(null)}
+          lang={lang}
+          onBlockIp={handleBlockIp}
+          isIpBlocked={blockedIps.has(alertThreatLog.sourceIp)}
+          onIsolateHost={handleIsolateHost}
+          isHostIsolated={isolatedHosts.has(alertThreatLog.sourceHost)}
+          onViewInForensics={(log) => {
+            setAlertThreatLog(null);
+            setSelectedLog(log);
+          }}
+        />
+      )}
+
       {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/80 py-4 text-center text-xs text-slate-400">
+      <footer className="border-t border-slate-900 bg-slate-950/80 py-4 text-center text-xs text-slate-400 transition-colors">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span>AegisSOC Platform</span>
+            <span className="font-semibold text-slate-200">Log Analyzer by Kunal</span>
             <span>·</span>
-            <span>Enterprise SIEM & Log Analyzer</span>
+            <span>Enterprise SIEM & SOC Intelligence</span>
           </div>
           <div>
             <span>MITRE ATT&CK v14 Compliant</span>
             <span className="mx-2">·</span>
-            <span className="font-mono text-cyan-400">Status: Nominal</span>
+            <span className="font-mono text-cyan-400 font-medium">Status: Active Monitoring</span>
           </div>
         </div>
       </footer>

@@ -21,6 +21,7 @@ interface IncidentTriageProps {
   onUpdateStatus: (incidentId: string, newStatus: 'new' | 'investigating' | 'contained' | 'resolved') => void;
   onBlockIp: (ip: string) => void;
   blockedIps: Set<string>;
+  onExportPdfReport: () => void;
 }
 
 export const IncidentTriage: React.FC<IncidentTriageProps> = ({
@@ -28,7 +29,8 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
   lang,
   onUpdateStatus,
   onBlockIp,
-  blockedIps
+  blockedIps,
+  onExportPdfReport
 }) => {
   const t = TRANSLATIONS[lang];
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(incidents[0] || null);
@@ -111,10 +113,21 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono">
-          <span className="text-slate-400">{incidents.length} active incidents</span>
-          <span className="text-slate-600">·</span>
-          <span className="text-rose-400">{incidents.filter(i => i.severity === 'critical').length} Critical P1</span>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono">
+            <span className="text-slate-400">{incidents.length} incidents</span>
+            <span className="text-slate-600">·</span>
+            <span className="text-rose-400">{incidents.filter(i => i.severity === 'critical').length} Critical</span>
+          </div>
+
+          <button
+            onClick={onExportPdfReport}
+            className="flex items-center gap-2 px-3.5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold rounded-lg shadow-sm shadow-cyan-900/30 transition-colors cursor-pointer"
+            title="Download Official Incident PDF Report"
+          >
+            <Download className="w-4 h-4" />
+            <span>{t.exportPdfButton}</span>
+          </button>
         </div>
       </div>
 
