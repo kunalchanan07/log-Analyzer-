@@ -1,0 +1,6 @@
+{
+  "name": "AegisSOC - Threat Intelligence & Log Analyzer",
+  "description": "Enterprise Security Operations Center (SOC) Log Analyzer and Real-Time Collector for detecting malicious cyber activity, MITRE ATT&CK threats, and suspicious anomalies.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
