@@ -20,6 +20,15 @@ export const TRANSLATIONS = {
     themeToggle: 'Theme',
     dlpToggle: 'DLP Masking',
     exportPdfButton: 'Export Compliance PDF Report',
+    globalSearchPlaceholder: 'Search logs, incidents, hosts... (⌘K)',
+    globalSearchTitle: 'Global SOC Telemetry Search',
+    searchCategoryAll: 'All',
+    searchCategoryLogs: 'Logs',
+    searchCategoryIncidents: 'Incidents',
+    searchCategoryHosts: 'Hosts & Assets',
+    searchNoResults: 'No matching records found across logs, incidents, or hostnames.',
+    searchHint: 'Navigate with ↑↓ • Enter to select • Esc to dismiss',
+    searchQuickFilters: 'Quick Queries',
 
     // Dashboard
     kpiTotalEvents: 'Total Logs Ingested',
@@ -140,6 +149,15 @@ export const TRANSLATIONS = {
     themeToggle: 'ਥੀਮ',
     dlpToggle: 'ਸੈਂਸਿਟਿਵ ਡੇਟਾ ਮਾਸਕਿੰਗ',
     exportPdfButton: 'ਕੰਪਲਾਇੰਸ PDF ਰਿਪੋਰਟ ਡਾਊਨਲੋਡ',
+    globalSearchPlaceholder: 'ਲੌਗਸ, ਘਟਨਾਵਾਂ, ਹੋਸਟਨੇਮ ਖੋਜੋ... (⌘K)',
+    globalSearchTitle: 'ਗਲੋਬਲ SOC ਟੈਲੀਮੈਟਰੀ ਖੋਜ',
+    searchCategoryAll: 'ਸਾਰੇ',
+    searchCategoryLogs: 'ਲੌਗਸ',
+    searchCategoryIncidents: 'ਘਟਨਾਵਾਂ',
+    searchCategoryHosts: 'ਹੋਸਟਨੇਮ / ਸਰਵਰ',
+    searchNoResults: 'ਕੋਈ ਲੌਗ, ਘਟਨਾ ਜਾਂ ਹੋਸਟ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ।',
+    searchHint: 'ਨੇਵੀਗੇਟ ਲਈ ↑↓ • ਚੁਣਨ ਲਈ Enter • ਬੰਦ ਲਈ Esc',
+    searchQuickFilters: 'ਤੇਜ਼ ਖੋਜ ਸੁਝਾਅ',
 
     // Dashboard
     kpiTotalEvents: 'ਕੁੱਲ ਇਕੱਠੇ ਕੀਤੇ ਲੌਗਸ',

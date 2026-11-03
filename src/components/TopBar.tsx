@@ -11,6 +11,8 @@ import {
   History 
 } from 'lucide-react';
 import { Language, TRANSLATIONS } from '../utils/i18n';
+import { GlobalSearchBar } from './GlobalSearchBar';
+import { LogEntry, Incident } from '../types/soc';
 
 interface TopBarProps {
   activeTab: 'dashboard' | 'collector' | 'explorer' | 'incidents' | 'rules' | 'audit';
@@ -25,6 +27,11 @@ interface TopBarProps {
   dlpEnabled: boolean;
   setDlpEnabled: (enabled: boolean) => void;
   onExportPdfReport: () => void;
+  logs: LogEntry[];
+  incidents: Incident[];
+  onSelectLog: (log: LogEntry) => void;
+  onSelectIncident: (incident: Incident) => void;
+  onSelectHost: (host: string) => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -39,7 +46,12 @@ export const TopBar: React.FC<TopBarProps> = ({
   setTheme,
   dlpEnabled,
   setDlpEnabled,
-  onExportPdfReport
+  onExportPdfReport,
+  logs,
+  incidents,
+  onSelectLog,
+  onSelectIncident,
+  onSelectHost
 }) => {
   const t = TRANSLATIONS[lang];
 
@@ -146,6 +158,16 @@ export const TopBar: React.FC<TopBarProps> = ({
             {t.navAudit}
           </button>
         </nav>
+
+        {/* Global SOC Search Bar (Cmd+K / Ctrl+K) */}
+        <GlobalSearchBar
+          logs={logs}
+          incidents={incidents}
+          lang={lang}
+          onSelectLog={onSelectLog}
+          onSelectIncident={onSelectIncident}
+          onSelectHost={onSelectHost}
+        />
 
         {/* Zone 3: Security Controls, PDF Export & Language */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">

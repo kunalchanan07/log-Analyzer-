@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Search, 
   Filter, 
@@ -17,17 +17,25 @@ interface LogExplorerProps {
   logs: LogEntry[];
   lang: Language;
   onSelectLog: (log: LogEntry) => void;
+  initialQuery?: string;
 }
 
-export const LogExplorer: React.FC<LogExplorerProps> = ({ logs, lang, onSelectLog }) => {
+export const LogExplorer: React.FC<LogExplorerProps> = ({ logs, lang, onSelectLog, initialQuery }) => {
   const t = TRANSLATIONS[lang];
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialQuery || '');
   const [selectedSeverity, setSelectedSeverity] = useState<Severity | 'all'>('all');
   const [selectedSource, setSelectedSource] = useState<LogSource | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'malicious' | 'clean'>('all');
   const [page, setPage] = useState(1);
   const pageSize = 20;
+
+  useEffect(() => {
+    if (initialQuery !== undefined) {
+      setSearchQuery(initialQuery);
+      setPage(1);
+    }
+  }, [initialQuery]);
 
   // Filter logs based on inputs
   const filteredLogs = useMemo(() => {

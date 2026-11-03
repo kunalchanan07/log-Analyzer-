@@ -475,6 +475,25 @@ export default function App() {
     setAuditRecords(prev => [auditEntry, ...prev]);
   };
 
+  // Global Search navigation state
+  const [explorerFilterQuery, setExplorerFilterQuery] = useState<string>('');
+  const [activeIncidentId, setActiveIncidentId] = useState<string | null>(null);
+
+  const handleSearchSelectLog = (log: LogEntry) => {
+    setSelectedLog(log);
+    setActiveTab('explorer');
+  };
+
+  const handleSearchSelectIncident = (incident: Incident) => {
+    setActiveIncidentId(incident.id);
+    setActiveTab('incidents');
+  };
+
+  const handleSearchSelectHost = (host: string) => {
+    setExplorerFilterQuery(host);
+    setActiveTab('explorer');
+  };
+
   const criticalIncidentCount = incidents.filter(i => i.severity === 'critical' && i.status !== 'resolved').length;
   const maliciousCount = logs.filter(l => l.isMalicious).length;
   const suspiciousCount = logs.filter(l => l.isSuspicious).length;
@@ -499,6 +518,11 @@ export default function App() {
         dlpEnabled={dlpEnabled}
         setDlpEnabled={setDlpEnabled}
         onExportPdfReport={handleExportPdfReport}
+        logs={displayedLogs}
+        incidents={incidents}
+        onSelectLog={handleSearchSelectLog}
+        onSelectIncident={handleSearchSelectIncident}
+        onSelectHost={handleSearchSelectHost}
       />
 
       {/* Main Content Area */}
@@ -536,6 +560,7 @@ export default function App() {
             logs={displayedLogs}
             lang={lang}
             onSelectLog={(log) => setSelectedLog(log)}
+            initialQuery={explorerFilterQuery}
           />
         )}
 
@@ -547,6 +572,7 @@ export default function App() {
             onBlockIp={handleBlockIp}
             blockedIps={blockedIps}
             onExportPdfReport={handleExportPdfReport}
+            selectedIncidentId={activeIncidentId}
           />
         )}
 

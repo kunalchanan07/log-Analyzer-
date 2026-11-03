@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldAlert, 
   CheckCircle2, 
@@ -22,6 +22,7 @@ interface IncidentTriageProps {
   onBlockIp: (ip: string) => void;
   blockedIps: Set<string>;
   onExportPdfReport: () => void;
+  selectedIncidentId?: string | null;
 }
 
 export const IncidentTriage: React.FC<IncidentTriageProps> = ({
@@ -30,12 +31,27 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
   onUpdateStatus,
   onBlockIp,
   blockedIps,
-  onExportPdfReport
+  onExportPdfReport,
+  selectedIncidentId
 }) => {
   const t = TRANSLATIONS[lang];
-  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(incidents[0] || null);
+  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(() => {
+    if (selectedIncidentId) {
+      return incidents.find(i => i.id === selectedIncidentId) || incidents[0] || null;
+    }
+    return incidents[0] || null;
+  });
   const [loadingAi, setLoadingAi] = useState(false);
   const [aiReport, setAiReport] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (selectedIncidentId) {
+      const match = incidents.find(i => i.id === selectedIncidentId);
+      if (match) {
+        setSelectedIncident(match);
+      }
+    }
+  }, [selectedIncidentId, incidents]);
 
   const handleRunAiAnalysis = async (incident: Incident) => {
     setLoadingAi(true);
