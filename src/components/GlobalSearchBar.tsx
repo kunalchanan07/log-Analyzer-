@@ -238,15 +238,15 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="w-full h-9 px-3 flex items-center justify-between text-xs rounded-lg bg-slate-900/90 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700 transition-all cursor-pointer shadow-inner group"
+          className="w-full h-9 px-3 flex items-center justify-between text-xs rounded-lg bg-neutral-900/90 border border-neutral-800 text-neutral-300 hover:text-white hover:border-yellow-400/50 transition-all cursor-pointer shadow-inner group"
           aria-label={t.globalSearchPlaceholder}
         >
           <div className="flex items-center gap-2 overflow-hidden text-left">
-            <Search className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 transition-colors shrink-0" />
+            <Search className="w-4 h-4 text-neutral-400 group-hover:text-yellow-400 transition-colors shrink-0" />
             <span className="truncate">{t.globalSearchPlaceholder}</span>
           </div>
           <div className="flex items-center gap-1 shrink-0 ml-2">
-            <kbd className="hidden md:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-semibold text-slate-400 bg-slate-800 border border-slate-700 rounded shadow-xs">
+            <kbd className="hidden md:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 rounded shadow-xs">
               ⌘K
             </kbd>
           </div>
@@ -257,28 +257,28 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="sm:hidden p-2 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-lg transition-colors cursor-pointer"
+        className="sm:hidden p-2 text-neutral-300 hover:text-white bg-neutral-900 border border-neutral-800 rounded-lg hover:border-yellow-400 transition-colors cursor-pointer"
         aria-label="Open Global Search"
       >
-        <Search className="w-4 h-4" />
+        <Search className="w-4 h-4 text-yellow-400" />
       </button>
 
       {/* Modal Backdrop & Command Palette */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150"
           onClick={() => setIsOpen(false)}
         >
           <div 
-            className="w-full max-w-2xl bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl overflow-hidden text-slate-100 flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-150"
+            className="w-full max-w-2xl bg-neutral-900 border border-neutral-700 rounded-xl shadow-2xl shadow-yellow-500/5 overflow-hidden text-neutral-100 flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-150"
             onClick={e => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
             aria-label={t.globalSearchTitle}
           >
             {/* Search Input Bar */}
-            <div className="p-3.5 border-b border-slate-800 flex items-center gap-3 bg-slate-950/60">
-              <Search className="w-5 h-5 text-cyan-400 shrink-0 ml-1" />
+            <div className="p-3.5 border-b border-neutral-800 flex items-center gap-3 bg-neutral-950/80">
+              <Search className="w-5 h-5 text-yellow-400 shrink-0 ml-1" />
               <input
                 ref={inputRef}
                 type="text"
@@ -286,13 +286,13 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={handleInputKeyDown}
                 placeholder={lang === 'pa' ? 'IP, ਹੋਸਟ, ਘਟਨਾ ਜਾਂ ਸੁਨੇਹਾ ਖੋਜੋ...' : 'Search logs, incidents, hostnames, IPs, MITRE techniques...'}
-                className="w-full bg-transparent text-sm sm:text-base text-slate-100 placeholder-slate-400 focus:outline-none"
+                className="w-full bg-transparent text-sm sm:text-base text-white placeholder-neutral-400 focus:outline-none"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery('')}
-                  className="p-1 text-slate-400 hover:text-slate-200 rounded cursor-pointer"
+                  className="p-1 text-neutral-400 hover:text-white rounded cursor-pointer"
                   title="Clear input"
                 >
                   <X className="w-4 h-4" />
@@ -301,24 +301,24 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="px-2 py-1 text-xs text-slate-400 hover:text-slate-200 bg-slate-800/80 hover:bg-slate-800 border border-slate-700 rounded cursor-pointer shrink-0"
+                className="px-2 py-1 text-xs text-neutral-300 hover:text-white bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded cursor-pointer shrink-0"
               >
                 ESC
               </button>
             </div>
 
             {/* Category Filter Pills */}
-            <div className="px-3.5 py-2 border-b border-slate-800/70 bg-slate-900/90 flex items-center gap-1.5 overflow-x-auto text-xs">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mr-1 shrink-0">
+            <div className="px-3.5 py-2 border-b border-neutral-800 bg-neutral-900 flex items-center gap-1.5 overflow-x-auto text-xs">
+              <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider mr-1 shrink-0">
                 Filter:
               </span>
               <button
                 type="button"
                 onClick={() => setCategory('all')}
-                className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer shrink-0 ${
+                className={`px-2.5 py-1 rounded-md font-semibold transition-colors cursor-pointer shrink-0 ${
                   category === 'all'
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    ? 'bg-yellow-400 text-neutral-950 shadow-sm'
+                    : 'text-neutral-300 hover:text-white hover:bg-neutral-800'
                 }`}
               >
                 {t.searchCategoryAll} ({searchResults.length})
@@ -326,10 +326,10 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
               <button
                 type="button"
                 onClick={() => setCategory('logs')}
-                className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-md font-semibold transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
                   category === 'logs'
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    ? 'bg-yellow-400 text-neutral-950 shadow-sm'
+                    : 'text-neutral-300 hover:text-white hover:bg-neutral-800'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
@@ -338,10 +338,10 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
               <button
                 type="button"
                 onClick={() => setCategory('incidents')}
-                className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-md font-semibold transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
                   category === 'incidents'
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    ? 'bg-yellow-400 text-neutral-950 shadow-sm'
+                    : 'text-neutral-300 hover:text-white hover:bg-neutral-800'
                 }`}
               >
                 <ShieldAlert className="w-3.5 h-3.5" />
@@ -350,10 +350,10 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
               <button
                 type="button"
                 onClick={() => setCategory('hosts')}
-                className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-md font-semibold transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
                   category === 'hosts'
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    ? 'bg-yellow-400 text-neutral-950 shadow-sm'
+                    : 'text-neutral-300 hover:text-white hover:bg-neutral-800'
                 }`}
               >
                 <Server className="w-3.5 h-3.5" />
@@ -399,17 +399,17 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
                       data-index={idx}
                       onClick={() => executeSelection(item)}
                       onMouseEnter={() => setActiveIndex(idx)}
-                      className={`p-2.5 rounded-lg flex items-center justify-between gap-3 cursor-pointer transition-colors ${
+                      className={`p-2.5 rounded-lg flex items-center justify-between gap-3 cursor-pointer transition-all ${
                         isActive 
-                          ? 'bg-cyan-950/50 border border-cyan-500/40 text-white' 
-                          : 'hover:bg-slate-800/60 text-slate-200 border border-transparent'
+                          ? 'bg-yellow-400/10 border-l-4 border-l-yellow-400 border-neutral-700 text-white' 
+                          : 'hover:bg-neutral-800/60 text-neutral-200 border-l-4 border-l-transparent border-transparent'
                       }`}
                     >
                       <div className="flex items-start gap-3 min-w-0">
                         {/* Type Icon */}
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
                           item.type === 'host'
-                            ? 'bg-blue-500/10 text-blue-400 border border-blue-500/30'
+                            ? 'bg-yellow-400/10 text-yellow-400 border border-yellow-400/30'
                             : item.type === 'incident'
                             ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
                             : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
@@ -422,7 +422,7 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
                         {/* Title & Subtitle */}
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-semibold truncate">
+                            <span className="text-xs font-bold text-white truncate">
                               {item.title}
                             </span>
                             {item.badge && (
@@ -431,7 +431,7 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-slate-400 truncate mt-0.5 font-mono">
+                          <div className="text-[11px] text-neutral-400 truncate mt-0.5 font-mono">
                             {item.subtitle}
                           </div>
                         </div>
@@ -439,10 +439,10 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
 
                       {/* Right Meta & Action */}
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[10px] font-mono text-slate-400 uppercase hidden sm:inline">
+                        <span className="text-[10px] font-mono text-neutral-400 uppercase hidden sm:inline">
                           {item.meta}
                         </span>
-                        <CornerDownLeft className={`w-3.5 h-3.5 transition-opacity ${isActive ? 'opacity-100 text-cyan-400' : 'opacity-0'}`} />
+                        <CornerDownLeft className={`w-3.5 h-3.5 transition-opacity ${isActive ? 'opacity-100 text-yellow-400' : 'opacity-0'}`} />
                       </div>
                     </div>
                   );
@@ -452,9 +452,9 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
 
             {/* Quick Queries row when query is empty */}
             {!query && (
-              <div className="p-2.5 border-t border-slate-800/80 bg-slate-950/40 flex items-center gap-2 overflow-x-auto text-xs">
-                <span className="text-[11px] text-slate-400 font-medium shrink-0 flex items-center gap-1">
-                  <Tag className="w-3 h-3 text-cyan-400" />
+              <div className="p-2.5 border-t border-neutral-800 bg-neutral-950/60 flex items-center gap-2 overflow-x-auto text-xs">
+                <span className="text-[11px] text-neutral-400 font-semibold shrink-0 flex items-center gap-1">
+                  <Tag className="w-3 h-3 text-yellow-400" />
                   {t.searchQuickFilters}:
                 </span>
                 {quickQueries.map(q => (
@@ -462,7 +462,7 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
                     key={q}
                     type="button"
                     onClick={() => setQuery(q)}
-                    className="px-2 py-0.5 text-[11px] font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700/60 cursor-pointer transition-colors shrink-0"
+                    className="px-2 py-0.5 text-[11px] font-mono bg-neutral-800 hover:bg-neutral-700 text-neutral-200 hover:text-yellow-300 rounded border border-neutral-700 cursor-pointer transition-colors shrink-0"
                   >
                     {q}
                   </button>
@@ -471,14 +471,14 @@ export const GlobalSearchBar: React.FC<GlobalSearchBarProps> = ({
             )}
 
             {/* Footer with keyboard guidance */}
-            <div className="p-2.5 border-t border-slate-800 bg-slate-950/70 flex items-center justify-between text-[11px] text-slate-400">
-              <span className="font-mono">
+            <div className="p-2.5 border-t border-neutral-800 bg-neutral-950/80 flex items-center justify-between text-[11px] text-neutral-400">
+              <span className="font-mono text-neutral-300">
                 {t.searchHint}
               </span>
-              <div className="flex items-center gap-1 font-mono text-[10px]">
-                <span className="px-1 py-0.5 bg-slate-800 rounded border border-slate-700">↑</span>
-                <span className="px-1 py-0.5 bg-slate-800 rounded border border-slate-700">↓</span>
-                <span className="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700">ENTER</span>
+              <div className="flex items-center gap-1 font-mono text-[10px] text-yellow-300">
+                <span className="px-1 py-0.5 bg-neutral-800 rounded border border-neutral-700">↑</span>
+                <span className="px-1 py-0.5 bg-neutral-800 rounded border border-neutral-700">↓</span>
+                <span className="px-1.5 py-0.5 bg-neutral-800 rounded border border-neutral-700">ENTER</span>
               </div>
             </div>
           </div>

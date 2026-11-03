@@ -7,8 +7,7 @@ import {
   Moon, 
   Lock, 
   Unlock, 
-  FileDown, 
-  History 
+  FileDown
 } from 'lucide-react';
 import { Language, TRANSLATIONS } from '../utils/i18n';
 import { GlobalSearchBar } from './GlobalSearchBar';
@@ -56,40 +55,41 @@ export const TopBar: React.FC<TopBarProps> = ({
   const t = TRANSLATIONS[lang];
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-950/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 lg:gap-8">
-        {/* Zone 1: Brand Wordmark */}
+    <header className="sticky top-0 z-40 bg-neutral-950/95 dark:bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 lg:gap-6">
+        {/* Zone 1: Brand Wordmark with Cyber Yellow & Crisp White */}
         <div className="flex items-center gap-3 shrink-0">
           <button 
             onClick={() => setActiveTab('dashboard')}
             className="flex items-center gap-2.5 text-left group focus-visible:outline-none cursor-pointer"
             aria-label="Log Analyzer Home"
           >
-            <div className="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400 transition-colors">
-              <Shield className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-lg bg-yellow-400 text-neutral-950 font-black border border-yellow-300 flex items-center justify-center shadow-md shadow-yellow-500/20 group-hover:bg-yellow-300 transition-all">
+              <Shield className="w-5 h-5 fill-neutral-950 stroke-neutral-950" />
             </div>
             <div>
-              <div className="text-sm sm:text-base font-bold tracking-tight text-white flex items-center gap-2">
-                <span>{t.appTitle}</span>
-                <span className="text-[10px] font-mono text-cyan-400 font-semibold border border-cyan-500/30 px-1.5 py-0.2 rounded bg-cyan-950/40">
-                  v2.5
+              <div className="text-sm sm:text-base font-extrabold tracking-tight text-white flex items-center gap-2">
+                <span className="uppercase tracking-wider">{t.appTitle}</span>
+                <span className="text-[10px] font-mono text-yellow-400 font-bold border border-yellow-400/40 px-1.5 py-0.5 rounded bg-yellow-400/10">
+                  PRO v2.5
                 </span>
               </div>
-              <div className="text-[10px] text-slate-400 hidden sm:block">
-                {t.appSubtitle}
+              <div className="text-[10px] text-neutral-300 font-medium hidden sm:flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse" />
+                <span>{t.appSubtitle}</span>
               </div>
             </div>
           </button>
         </div>
 
-        {/* Zone 2: Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-5 text-xs font-medium" aria-label="Main Navigation">
+        {/* Zone 2: Navigation Links with Yellow & White Contrast */}
+        <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold" aria-label="Main Navigation">
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`whitespace-nowrap transition-colors py-1 ${
+            className={`whitespace-nowrap transition-all py-1.5 ${
               activeTab === 'dashboard'
-                ? 'text-cyan-400 font-semibold border-b-2 border-cyan-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-yellow-400 font-bold border-b-2 border-yellow-400 shadow-[0_1px_0_0_#facc15]'
+                : 'text-neutral-300 hover:text-white'
             }`}
           >
             {t.navDashboard}
@@ -97,24 +97,24 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           <button
             onClick={() => setActiveTab('collector')}
-            className={`whitespace-nowrap transition-colors py-1 flex items-center gap-1.5 ${
+            className={`whitespace-nowrap transition-all py-1.5 flex items-center gap-1.5 ${
               activeTab === 'collector'
-                ? 'text-cyan-400 font-semibold border-b-2 border-cyan-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-yellow-400 font-bold border-b-2 border-yellow-400 shadow-[0_1px_0_0_#facc15]'
+                : 'text-neutral-300 hover:text-white'
             }`}
           >
             <span>{t.navCollector}</span>
             {isStreaming && (
-              <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="Ingestion active" />
+              <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-ping" title="Ingestion active" />
             )}
           </button>
 
           <button
             onClick={() => setActiveTab('explorer')}
-            className={`whitespace-nowrap transition-colors py-1 ${
+            className={`whitespace-nowrap transition-all py-1.5 ${
               activeTab === 'explorer'
-                ? 'text-cyan-400 font-semibold border-b-2 border-cyan-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-yellow-400 font-bold border-b-2 border-yellow-400 shadow-[0_1px_0_0_#facc15]'
+                : 'text-neutral-300 hover:text-white'
             }`}
           >
             {t.navLogs}
@@ -122,10 +122,10 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           <button
             onClick={() => setActiveTab('incidents')}
-            className={`whitespace-nowrap transition-colors py-1 flex items-center gap-1.5 ${
+            className={`whitespace-nowrap transition-all py-1.5 flex items-center gap-1.5 ${
               activeTab === 'incidents'
-                ? 'text-cyan-400 font-semibold border-b-2 border-cyan-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-yellow-400 font-bold border-b-2 border-yellow-400 shadow-[0_1px_0_0_#facc15]'
+                : 'text-neutral-300 hover:text-white'
             }`}
           >
             <span>{t.navIncidents}</span>
@@ -138,10 +138,10 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           <button
             onClick={() => setActiveTab('rules')}
-            className={`whitespace-nowrap transition-colors py-1 ${
+            className={`whitespace-nowrap transition-all py-1.5 ${
               activeTab === 'rules'
-                ? 'text-cyan-400 font-semibold border-b-2 border-cyan-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-yellow-400 font-bold border-b-2 border-yellow-400 shadow-[0_1px_0_0_#facc15]'
+                : 'text-neutral-300 hover:text-white'
             }`}
           >
             {t.navRules}
@@ -149,10 +149,10 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           <button
             onClick={() => setActiveTab('audit')}
-            className={`whitespace-nowrap transition-colors py-1 ${
+            className={`whitespace-nowrap transition-all py-1.5 ${
               activeTab === 'audit'
-                ? 'text-cyan-400 font-semibold border-b-2 border-cyan-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-yellow-400 font-bold border-b-2 border-yellow-400 shadow-[0_1px_0_0_#facc15]'
+                : 'text-neutral-300 hover:text-white'
             }`}
           >
             {t.navAudit}
@@ -176,92 +176,92 @@ export const TopBar: React.FC<TopBarProps> = ({
             onClick={() => setDlpEnabled(!dlpEnabled)}
             className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
               dlpEnabled 
-                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' 
-                : 'bg-slate-900 text-slate-400 border-slate-800'
+                ? 'bg-yellow-400/10 text-yellow-300 border-yellow-400/40 font-mono' 
+                : 'bg-neutral-900 text-neutral-400 border-neutral-800'
             }`}
             title="DLP Sensitive Data Redaction"
           >
-            {dlpEnabled ? <Lock className="w-3.5 h-3.5 text-emerald-400" /> : <Unlock className="w-3.5 h-3.5 text-slate-500" />}
+            {dlpEnabled ? <Lock className="w-3.5 h-3.5 text-yellow-400" /> : <Unlock className="w-3.5 h-3.5 text-neutral-500" />}
             <span className="text-[11px] font-mono">{dlpEnabled ? 'DLP REDACTED' : 'DLP OFF'}</span>
           </button>
 
-          {/* Export PDF Compliance Report Button */}
+          {/* Export PDF Compliance Report Button in Crisp White */}
           <button
             onClick={onExportPdfReport}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-200 bg-slate-900 border border-slate-700 hover:border-cyan-400 hover:text-white rounded-lg transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-neutral-950 bg-white hover:bg-neutral-100 border border-white/80 rounded-lg transition-all shadow-sm hover:shadow"
             title="Download Official Incident PDF Report"
             aria-label="Export Compliance PDF Report"
           >
-            <FileDown className="w-3.5 h-3.5 text-cyan-400" />
+            <FileDown className="w-3.5 h-3.5 text-neutral-950" />
             <span className="hidden md:inline font-mono text-[11px]">EXPORT PDF</span>
           </button>
 
           {/* Theme Toggle (Dark Mode / Light Mode) */}
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-1.5 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-lg transition-colors"
+            className="p-1.5 text-neutral-300 hover:text-white bg-neutral-900 border border-neutral-800 rounded-lg hover:border-neutral-700 transition-colors"
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
             aria-label="Toggle theme"
           >
-            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-cyan-400" />}
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-yellow-400" /> : <Moon className="w-4 h-4 text-neutral-300" />}
           </button>
 
           {/* Language Toggle */}
           <button
             onClick={() => setLang(lang === 'en' ? 'pa' : 'en')}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-300 bg-slate-900 border border-slate-800 rounded-lg hover:border-slate-700 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-neutral-200 bg-neutral-900 border border-neutral-800 rounded-lg hover:border-neutral-700 hover:text-white transition-colors"
             aria-label={`Switch to ${lang === 'en' ? 'Punjabi' : 'English'}`}
           >
-            <Globe className="w-3.5 h-3.5 text-slate-400" />
-            <span>{t.languageSwitch}</span>
+            <Globe className="w-3.5 h-3.5 text-yellow-400" />
+            <span className="font-semibold">{t.languageSwitch}</span>
           </button>
 
-          {/* Quick Side Ingest Drawer */}
+          {/* Quick Side Ingest Drawer in Cyber Yellow */}
           <button
             onClick={onOpenCollectorDrawer}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg transition-colors whitespace-nowrap shadow-sm shadow-cyan-900/30"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-neutral-950 bg-yellow-400 hover:bg-yellow-300 rounded-lg transition-all whitespace-nowrap shadow-md shadow-yellow-500/20 active:scale-95 cursor-pointer"
           >
-            <Radio className="w-3.5 h-3.5" />
+            <Radio className="w-3.5 h-3.5 text-neutral-950 stroke-[2.5]" />
             <span>{lang === 'pa' ? 'ਇੰਜੈਸਟ ਪੈਨਲ' : 'Ingest Logs'}</span>
           </button>
         </div>
       </div>
 
       {/* Responsive mobile nav strip */}
-      <div className="lg:hidden flex items-center px-4 py-2 border-t border-slate-900 bg-slate-950 text-xs overflow-x-auto gap-4">
+      <div className="lg:hidden flex items-center px-4 py-2 border-t border-neutral-900 bg-neutral-950 text-xs overflow-x-auto gap-4">
         <button
           onClick={() => setActiveTab('dashboard')}
-          className={`whitespace-nowrap py-1 ${activeTab === 'dashboard' ? 'text-cyan-400 font-bold' : 'text-slate-400'}`}
+          className={`whitespace-nowrap py-1 ${activeTab === 'dashboard' ? 'text-yellow-400 font-bold border-b border-yellow-400' : 'text-neutral-400'}`}
         >
           {t.navDashboard}
         </button>
         <button
           onClick={() => setActiveTab('collector')}
-          className={`whitespace-nowrap py-1 ${activeTab === 'collector' ? 'text-cyan-400 font-bold' : 'text-slate-400'}`}
+          className={`whitespace-nowrap py-1 ${activeTab === 'collector' ? 'text-yellow-400 font-bold border-b border-yellow-400' : 'text-neutral-400'}`}
         >
           {t.navCollector}
         </button>
         <button
           onClick={() => setActiveTab('explorer')}
-          className={`whitespace-nowrap py-1 ${activeTab === 'explorer' ? 'text-cyan-400 font-bold' : 'text-slate-400'}`}
+          className={`whitespace-nowrap py-1 ${activeTab === 'explorer' ? 'text-yellow-400 font-bold border-b border-yellow-400' : 'text-neutral-400'}`}
         >
           {t.navLogs}
         </button>
         <button
           onClick={() => setActiveTab('incidents')}
-          className={`whitespace-nowrap py-1 ${activeTab === 'incidents' ? 'text-cyan-400 font-bold' : 'text-slate-400'}`}
+          className={`whitespace-nowrap py-1 ${activeTab === 'incidents' ? 'text-yellow-400 font-bold border-b border-yellow-400' : 'text-neutral-400'}`}
         >
           {t.navIncidents} ({criticalIncidentCount})
         </button>
         <button
           onClick={() => setActiveTab('rules')}
-          className={`whitespace-nowrap py-1 ${activeTab === 'rules' ? 'text-cyan-400 font-bold' : 'text-slate-400'}`}
+          className={`whitespace-nowrap py-1 ${activeTab === 'rules' ? 'text-yellow-400 font-bold border-b border-yellow-400' : 'text-neutral-400'}`}
         >
           {t.navRules}
         </button>
         <button
           onClick={() => setActiveTab('audit')}
-          className={`whitespace-nowrap py-1 ${activeTab === 'audit' ? 'text-cyan-400 font-bold' : 'text-slate-400'}`}
+          className={`whitespace-nowrap py-1 ${activeTab === 'audit' ? 'text-yellow-400 font-bold border-b border-yellow-400' : 'text-neutral-400'}`}
         >
           {t.navAudit}
         </button>

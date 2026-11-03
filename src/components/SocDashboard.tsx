@@ -13,7 +13,10 @@ import {
   Clock, 
   CheckCircle2,
   ChevronRight,
-  ShieldCheck
+  ShieldCheck,
+  Radio,
+  Download,
+  Crosshair
 } from 'lucide-react';
 import { LogEntry, Severity, ThreatCategory } from '../types/soc';
 import { Language, TRANSLATIONS } from '../utils/i18n';
@@ -95,13 +98,13 @@ export const SocDashboard: React.FC<SocDashboardProps> = ({
   const getSeverityBadgeClass = (sev: Severity) => {
     switch (sev) {
       case 'critical':
-        return 'text-rose-400 border border-rose-500/30 bg-rose-500/10';
+        return 'text-rose-400 border border-rose-500/40 bg-rose-500/10 font-bold';
       case 'high':
-        return 'text-amber-400 border border-amber-500/30 bg-amber-500/10';
+        return 'text-yellow-400 border border-yellow-400/40 bg-yellow-400/10 font-bold';
       case 'medium':
-        return 'text-sky-400 border border-sky-500/30 bg-sky-500/10';
+        return 'text-amber-300 border border-amber-400/30 bg-amber-400/10';
       case 'low':
-        return 'text-slate-400 border border-slate-700 bg-slate-800/40';
+        return 'text-neutral-300 border border-neutral-700 bg-neutral-800';
       default:
         return 'text-emerald-400 border border-emerald-500/30 bg-emerald-500/10';
     }
@@ -109,119 +112,143 @@ export const SocDashboard: React.FC<SocDashboardProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Overview Header Strip */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            <span>{lang === 'pa' ? 'ਸੁਰੱਖਿਆ ਸੰਚਾਲਨ ਕੇਂਦਰ ਕੰਸੋਲ' : 'SOC Command & Monitoring Console'}</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            {lang === 'pa'
-              ? 'ਰੀਅਲ-ਟਾਈਮ ਖਤਰਾ ਵਿਸ਼ਲੇਸ਼ਣ, ਹਮਲਾਵਰ IPs ਦੀ ਪਛਾਣ ਅਤੇ MITRE ATT&CK ਅਨੁਕੂਲਤਾ'
-              : 'Real-time threat detection, automated telemetry normalization, and MITRE ATT&CK threat hunting'}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300">
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-            <span className="font-semibold">{t.threatLevel}:</span>
-            <span className="text-rose-400 font-mono font-bold">{t.elevated}</span>
+      {/* Top Threat Posture Header Strip */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-neutral-900 via-neutral-900 to-neutral-950 border border-neutral-800 relative overflow-hidden shadow-xl">
+        {/* Ambient cyber yellow glow */}
+        <div className="absolute top-0 right-0 w-96 h-32 bg-yellow-400/5 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-yellow-400 text-neutral-950 shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-neutral-950 animate-ping" />
+                ACTIVE SOC RADAR
+              </span>
+              <span className="text-xs text-neutral-400 font-mono">
+                SIEM & THREAT INTELLIGENCE
+              </span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2 uppercase">
+              <span>{lang === 'pa' ? 'ਸੁਰੱਖਿਆ ਸੰਚਾਲਨ ਕੇਂਦਰ ਕੰਸੋਲ' : 'SOC Command & Intelligence Center'}</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-neutral-300 font-medium max-w-2xl">
+              {lang === 'pa'
+                ? 'ਰੀਅਲ-ਟਾਈਮ ਖਤਰਾ ਵਿਸ਼ਲੇਸ਼ਣ, ਹਮਲਾਵਰ IPs ਦੀ ਪਛਾਣ ਅਤੇ MITRE ATT&CK ਅਨੁਕੂਲਤਾ'
+                : 'Real-time telemetry ingestion, threat hunting, automated payload signature matching, and incident triage.'}
+            </p>
           </div>
 
-          <button
-            onClick={onNavigateToCollector}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 transition-colors flex items-center gap-1.5"
-          >
-            <span>{lang === 'pa' ? 'ਕਲੈਕਟਰ ਸਟ੍ਰੀਮ' : 'Collector Stream'}</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            {/* DEFCON Threat Badge */}
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-neutral-950 border border-yellow-400/30 text-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_8px_#facc15]" />
+              <div className="text-left font-mono">
+                <span className="text-[10px] text-neutral-400 block uppercase">{t.threatLevel}</span>
+                <span className="text-yellow-400 font-bold">{t.elevated}</span>
+              </div>
+            </div>
+
+            {/* Quick Collector Navigation Button */}
+            <button
+              onClick={onNavigateToCollector}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-yellow-400 hover:bg-yellow-300 text-neutral-950 transition-all flex items-center gap-1.5 shadow-md shadow-yellow-500/20 active:scale-95 cursor-pointer"
+            >
+              <Radio className="w-4 h-4 stroke-[2.5]" />
+              <span>{lang === 'pa' ? 'ਲੌਗ ਇੰਜੈਸਟ ਸਟ੍ਰੀਮ' : 'Collector Stream'}</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* KPI Cards Strip */}
+      {/* KPI Cards Strip with High-Contrast White and Cyber Yellow */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
         {/* KPI 1: Ingested */}
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-white hover:border-neutral-700 transition-all shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{t.kpiTotalEvents}</span>
-            <Layers className="w-4 h-4 text-cyan-400" />
+            <Layers className="w-4 h-4 text-white" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-white">
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-white">
             {totalLogs.toLocaleString()}
           </div>
-          <div className="mt-1 text-[11px] text-slate-400">
-            {lang === 'pa' ? 'ਸਾਰੇ ਸਰੋਤ' : 'Normalized'}
+          <div className="mt-1 text-[11px] text-neutral-300 font-medium flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-white" />
+            <span>{lang === 'pa' ? 'ਸਾਰੇ ਸਰੋਤ' : 'Normalized'}</span>
           </div>
         </div>
 
         {/* KPI 2: Malicious */}
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-rose-500 hover:border-rose-500/50 transition-all shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{t.kpiMalicious}</span>
             <ShieldAlert className="w-4 h-4 text-rose-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-rose-400">
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-rose-400">
             {maliciousLogs.length}
           </div>
-          <div className="mt-1 text-[11px] text-rose-300/80 font-mono tabular-nums">
+          <div className="mt-1 text-[11px] text-rose-300 font-mono font-semibold tabular-nums">
             {totalLogs > 0 ? ((maliciousLogs.length / totalLogs) * 100).toFixed(1) : 0}% of logs
           </div>
         </div>
 
         {/* KPI 3: Suspicious */}
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-yellow-400 hover:border-yellow-400/50 transition-all shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{t.kpiSuspicious}</span>
-            <AlertTriangle className="w-4 h-4 text-amber-400" />
+            <AlertTriangle className="w-4 h-4 text-yellow-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-amber-400">
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-yellow-400">
             {suspiciousLogs.length}
           </div>
-          <div className="mt-1 text-[11px] text-amber-300/80">
+          <div className="mt-1 text-[11px] text-yellow-300 font-medium">
             {lang === 'pa' ? 'ਐਨੋਮਲੀ ਸਕੋਰ' : 'Behavioral triggers'}
           </div>
         </div>
 
         {/* KPI 4: Critical Incidents */}
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-white hover:border-neutral-700 transition-all shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{t.kpiCriticalIncidents}</span>
             <Flame className="w-4 h-4 text-rose-500" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-white">
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-white">
             {criticalCount}
           </div>
-          <div className="mt-1 text-[11px] text-rose-400 font-semibold">
+          <div className="mt-1 text-[11px] text-rose-400 font-bold">
             {criticalCount > 0 ? (lang === 'pa' ? 'ਤੁਰੰਤ ਐਕਸ਼ਨ ਲੋੜੀਂਦਾ' : 'P1 High Impact') : 'Nominal'}
           </div>
         </div>
 
         {/* KPI 5: EPS */}
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-yellow-400 hover:border-yellow-400/50 transition-all shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{t.kpiEps}</span>
-            <Activity className="w-4 h-4 text-emerald-400" />
+            <Activity className="w-4 h-4 text-yellow-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-white">
-            36 <span className="text-xs font-sans text-slate-400">EPS</span>
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-white">
+            36 <span className="text-xs font-sans text-neutral-400 font-normal">EPS</span>
           </div>
-          <div className="mt-1 text-[11px] text-slate-400 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <div className="mt-1 text-[11px] text-yellow-300 font-mono flex items-center gap-1 font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
             <span>0 dropped</span>
           </div>
         </div>
 
         {/* KPI 6: Average Threat Score */}
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-white hover:border-neutral-700 transition-all shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{t.kpiThreatScore}</span>
-            <Zap className="w-4 h-4 text-cyan-400" />
+            <Zap className="w-4 h-4 text-yellow-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-cyan-400">
-            {maliciousLogs.length > 0 ? '94/100' : '12/100'}
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-white">
+            {maliciousLogs.length > 0 ? (
+              <span className="text-yellow-400">94<span className="text-sm font-sans text-neutral-400">/100</span></span>
+            ) : (
+              <span>12<span className="text-sm font-sans text-neutral-400">/100</span></span>
+            )}
           </div>
-          <div className="mt-1 text-[11px] text-slate-400">
+          <div className="mt-1 text-[11px] text-neutral-300 font-medium">
             {lang === 'pa' ? 'ਸੀਵੀਅਰ ਥ੍ਰੈਟ ਇੰਡੈਕਸ' : 'Risk assessment'}
           </div>
         </div>
@@ -240,74 +267,77 @@ export const SocDashboard: React.FC<SocDashboardProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column (8 cols): Real-Time Threat Detections Feed */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <div className="flex items-center justify-between mb-4">
+          <div className="p-5 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-xl">
+            <div className="flex items-center justify-between mb-4 border-b border-neutral-800 pb-3">
               <div>
-                <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-rose-400" />
+                <h2 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
+                  <ShieldAlert className="w-4 h-4 text-yellow-400" />
                   <span>{t.recentThreats}</span>
+                  <span className="text-xs font-mono font-bold bg-yellow-400/10 text-yellow-300 border border-yellow-400/30 px-2 py-0.5 rounded-full">
+                    {recentDetections.length} ACTIVE
+                  </span>
                 </h2>
-                <div className="text-xs text-slate-400 mt-0.5">
+                <div className="text-xs text-neutral-400 mt-1">
                   {lang === 'pa' ? 'ਹਮਲਾਵਰ ਹਰਕਤਾਂ ਅਤੇ ਸ਼ੱਕੀ ਪੈਟਰਨਜ਼ ਦਾ ਵੇਰਵਾ' : 'Live stream of identified malicious payloads & suspicious signatures'}
                 </div>
               </div>
 
               <button
                 onClick={onNavigateToExplorer}
-                className="text-xs text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1 transition-colors"
+                className="text-xs text-neutral-200 hover:text-yellow-400 font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-neutral-800 cursor-pointer"
               >
                 <span>{t.viewAllLogs}</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <ChevronRight className="w-3.5 h-3.5 text-yellow-400" />
               </button>
             </div>
 
             {/* Threat List Table */}
             {recentDetections.length === 0 ? (
-              <div className="py-12 text-center text-slate-500 text-xs">
+              <div className="py-12 text-center text-neutral-400 text-xs">
                 {lang === 'pa' ? 'ਕੋਈ ਸਰਗਰਮ ਖਤਰਾ ਨਹੀਂ ਮਿਲਿਆ। ਕਲੈਕਟਰ ਵਿੱਚੋਂ ਹਮਲਾ ਸੀਨਰੀਓ ਚਲਾਓ।' : 'No threats detected yet. Ingest logs or trigger an attack simulation in the Collector.'}
               </div>
             ) : (
-              <div className="divide-y divide-slate-800/80">
+              <div className="divide-y divide-neutral-800/80">
                 {recentDetections.map((log) => (
                   <div
                     key={log.id}
                     onClick={() => onSelectLog(log)}
-                    className="py-3 px-2 rounded-lg hover:bg-slate-800/50 cursor-pointer transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                    className="py-3 px-3 rounded-xl hover:bg-neutral-800/60 cursor-pointer transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group border border-transparent hover:border-yellow-400/20"
                   >
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase ${getSeverityBadgeClass(log.severity)}`}>
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase ${getSeverityBadgeClass(log.severity)}`}>
                           {log.severity}
                         </span>
 
-                        <span className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                        <span className="text-xs font-bold text-white group-hover:text-yellow-300 transition-colors">
                           {log.ruleMatched?.name || log.category}
                         </span>
 
                         {log.ruleMatched?.mitreId && (
-                          <span className="text-[11px] font-mono text-cyan-400/80">
+                          <span className="text-[11px] font-mono font-bold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.2 rounded border border-yellow-400/30">
                             MITRE {log.ruleMatched.mitreId}
                           </span>
                         )}
                       </div>
 
                       {/* Log raw preview */}
-                      <div className="text-xs font-mono text-slate-400 truncate max-w-xl">
+                      <div className="text-xs font-mono text-neutral-300 truncate max-w-xl">
                         {log.raw}
                       </div>
 
                       {/* Metadata row with clean unboxed text and bullet separators */}
-                      <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
-                        <span className="text-slate-400">{log.sourceIp}</span>
-                        <span aria-hidden="true">·</span>
-                        <span className="text-slate-400">{log.sourceHost}</span>
-                        <span aria-hidden="true">·</span>
-                        <span className="tabular-nums">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                      <div className="flex items-center gap-2 text-[11px] text-neutral-400 font-mono">
+                        <span className="text-white font-medium">{log.sourceIp}</span>
+                        <span aria-hidden="true" className="text-yellow-400">·</span>
+                        <span className="text-neutral-300">{log.sourceHost}</span>
+                        <span aria-hidden="true" className="text-yellow-400">·</span>
+                        <span className="tabular-nums text-neutral-400">{new Date(log.timestamp).toLocaleTimeString()}</span>
                       </div>
                     </div>
 
                     <div className="shrink-0 flex items-center gap-2 sm:self-center">
-                      <span className="text-xs font-mono tabular-nums text-slate-400 group-hover:text-cyan-400 flex items-center gap-1">
+                      <span className="text-xs font-mono font-bold text-neutral-300 group-hover:text-yellow-400 flex items-center gap-1 transition-colors">
                         <span>{t.details}</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </span>
@@ -318,81 +348,111 @@ export const SocDashboard: React.FC<SocDashboardProps> = ({
             )}
           </div>
 
-          {/* Attack Vector Breakdown */}
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h2 className="text-sm font-semibold text-white mb-3">
-              {t.attackVectors}
-            </h2>
+          {/* Attack Vector Breakdown with Yellow Progress Bars */}
+          <div className="p-5 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-xl">
+            <div className="flex items-center justify-between mb-4 border-b border-neutral-800 pb-3">
+              <h2 className="text-sm font-extrabold text-white uppercase tracking-wide flex items-center gap-2">
+                <Crosshair className="w-4 h-4 text-yellow-400" />
+                <span>{t.attackVectors}</span>
+              </h2>
+              <span className="text-xs font-mono text-neutral-400">
+                ATT&CK TAXONOMY
+              </span>
+            </div>
+
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {[
-                { label: 'SQL Injection', count: categoryCounts.sqli, code: 'T1190', color: 'rose' },
-                { label: 'Ransomware VSS', count: categoryCounts.ransomware, code: 'T1490', color: 'rose' },
-                { label: 'SSH Brute Force', count: categoryCounts.brute_force, code: 'T1110', color: 'amber' },
-                { label: 'C2 Beaconing', count: categoryCounts.c2_beacon, code: 'T1071', color: 'amber' },
-                { label: 'Port Scanning', count: categoryCounts.port_scan, code: 'T1046', color: 'sky' },
-                { label: 'Path Traversal', count: categoryCounts.directory_traversal, code: 'T1006', color: 'indigo' },
-              ].map(item => (
-                <div key={item.label} className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="flex items-center justify-between text-xs text-slate-400">
-                    <span className="truncate">{item.label}</span>
-                    <span className="font-mono text-[10px] text-slate-500">{item.code}</span>
+                { label: 'SQL Injection', count: categoryCounts.sqli, code: 'T1190', max: 20 },
+                { label: 'Ransomware VSS', count: categoryCounts.ransomware, code: 'T1490', max: 10 },
+                { label: 'SSH Brute Force', count: categoryCounts.brute_force, code: 'T1110', max: 25 },
+                { label: 'C2 Beaconing', count: categoryCounts.c2_beacon, code: 'T1071', max: 15 },
+                { label: 'Port Scanning', count: categoryCounts.port_scan, code: 'T1046', max: 20 },
+                { label: 'Path Traversal', count: categoryCounts.directory_traversal, code: 'T1006', max: 15 },
+              ].map(item => {
+                const percent = Math.min(100, Math.round((item.count / Math.max(item.max, 1)) * 100));
+                return (
+                  <div key={item.label} className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-yellow-400/40 transition-all">
+                    <div className="flex items-center justify-between text-xs text-neutral-300 font-medium">
+                      <span className="truncate">{item.label}</span>
+                      <span className="font-mono text-[10px] text-yellow-400 font-bold">{item.code}</span>
+                    </div>
+                    <div className="mt-2 flex items-baseline justify-between">
+                      <span className="text-xl font-black font-mono tabular-nums text-white">
+                        {item.count}
+                      </span>
+                      <span className="text-[10px] font-mono text-neutral-400">
+                        {item.count > 0 ? `${item.count} events` : '0 active'}
+                      </span>
+                    </div>
+                    {/* Yellow Progress indicator */}
+                    <div className="w-full bg-neutral-800 rounded-full h-1.5 mt-2 overflow-hidden">
+                      <div 
+                        className="bg-yellow-400 h-1.5 rounded-full transition-all duration-500" 
+                        style={{ width: `${item.count > 0 ? Math.max(10, percent) : 0}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="mt-1.5 text-lg font-bold font-mono tabular-nums text-white">
-                    {item.count}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
 
         {/* Right Column (4 cols): Top Adversary IPs & Asset Health */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Top Threat Actor IPs */}
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-                <Globe2 className="w-4 h-4 text-cyan-400" />
+          {/* Top Threat Actor IPs with Yellow Ranking */}
+          <div className="p-5 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-xl">
+            <div className="flex items-center justify-between mb-4 border-b border-neutral-800 pb-3">
+              <h2 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
+                <Globe2 className="w-4 h-4 text-yellow-400" />
                 <span>{t.topAttackerIps}</span>
               </h2>
+              <span className="text-[10px] font-mono text-yellow-400 font-bold bg-yellow-400/10 px-2 py-0.5 rounded border border-yellow-400/30">
+                ACTIVE C2/BOTS
+              </span>
             </div>
 
             <div className="space-y-3">
               {topAttackerIps.length === 0 ? (
-                <div className="text-xs text-slate-500 py-4 text-center">
+                <div className="text-xs text-neutral-400 py-4 text-center">
                   {lang === 'pa' ? 'ਕੋਈ ਹਮਲਾਵਰ IP ਨਹੀਂ ਮਿਲਿਆ' : 'No threat IPs identified'}
                 </div>
               ) : (
-                topAttackerIps.map(([ip, data]) => {
+                topAttackerIps.map(([ip, data], index) => {
                   const isBlocked = blockedIps.has(ip);
                   return (
                     <div 
                       key={ip} 
-                      className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between gap-3 text-xs"
+                      className="p-3 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 flex items-center justify-between gap-3 text-xs transition-all"
                     >
-                      <div>
-                        <div className="font-mono font-bold text-slate-200 flex items-center gap-2">
-                          <span>{ip}</span>
-                          {isBlocked && (
-                            <span className="text-[10px] text-rose-400 border border-rose-500/30 px-1 py-0.2 rounded font-sans">
-                              BLOCKED
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">
-                          <span>{data.count} hits</span>
-                          <span className="mx-1">·</span>
-                          <span className="text-rose-400">{data.category}</span>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="w-5 h-5 rounded-md bg-yellow-400 text-neutral-950 font-black font-mono text-[10px] flex items-center justify-center shrink-0">
+                          #{index + 1}
+                        </span>
+                        <div className="min-w-0">
+                          <div className="font-mono font-bold text-white flex items-center gap-2 truncate">
+                            <span>{ip}</span>
+                            {isBlocked && (
+                              <span className="text-[9px] text-rose-300 font-bold border border-rose-500/40 bg-rose-500/20 px-1 py-0.2 rounded font-mono">
+                                BLOCKED
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[11px] text-neutral-400 mt-0.5 flex items-center gap-1.5 font-mono">
+                            <span className="text-white font-medium">{data.count} hits</span>
+                            <span className="text-yellow-400">·</span>
+                            <span className="text-yellow-300 font-semibold">{data.category}</span>
+                          </div>
                         </div>
                       </div>
 
                       <button
                         onClick={() => onBlockIp(ip)}
                         disabled={isBlocked}
-                        className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors ${
+                        className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition-all shrink-0 cursor-pointer ${
                           isBlocked
-                            ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                            : 'bg-rose-600/20 text-rose-300 border border-rose-500/40 hover:bg-rose-600 hover:text-white'
+                            ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
+                            : 'bg-yellow-400 hover:bg-yellow-300 text-neutral-950 shadow-sm shadow-yellow-500/20 active:scale-95'
                         }`}
                         aria-label={`Block IP ${ip}`}
                       >
@@ -406,26 +466,34 @@ export const SocDashboard: React.FC<SocDashboardProps> = ({
           </div>
 
           {/* High-Value Target Assets */}
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h2 className="text-sm font-semibold text-white flex items-center gap-2 mb-3">
-              <Server className="w-4 h-4 text-cyan-400" />
-              <span>{t.targetedAssets}</span>
-            </h2>
+          <div className="p-5 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-xl">
+            <div className="flex items-center justify-between mb-4 border-b border-neutral-800 pb-3">
+              <h2 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
+                <Server className="w-4 h-4 text-white" />
+                <span>{t.targetedAssets}</span>
+              </h2>
+              <span className="text-[10px] font-mono text-neutral-400">
+                TIER 1 TARGETS
+              </span>
+            </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {topTargetedHosts.length === 0 ? (
-                <div className="text-xs text-slate-500 py-3 text-center">
+                <div className="text-xs text-neutral-400 py-3 text-center">
                   {lang === 'pa' ? 'ਸਾਰੇ ਸਰਵਰ ਸੁਰੱਖਿਅਤ ਹਨ' : 'All assets operational'}
                 </div>
               ) : (
                 topTargetedHosts.map(([host, count]) => (
-                  <div key={host} className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+                  <div key={host} className="p-3 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center justify-between text-xs">
                     <div>
-                      <div className="font-mono text-slate-200 font-semibold">{host}</div>
-                      <div className="text-[11px] text-slate-500">{count} security events</div>
+                      <div className="font-mono text-white font-bold flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+                        <span>{host}</span>
+                      </div>
+                      <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">{count} telemetry alerts</div>
                     </div>
-                    <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                      TARGETED
+                    <span className="text-[10px] font-mono font-bold text-yellow-300 bg-yellow-400/10 px-2 py-0.5 rounded border border-yellow-400/30">
+                      UNDER PROBE
                     </span>
                   </div>
                 ))
@@ -434,27 +502,32 @@ export const SocDashboard: React.FC<SocDashboardProps> = ({
           </div>
 
           {/* MITRE ATT&CK Matrix Quick Card */}
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h2 className="text-sm font-semibold text-white flex items-center gap-2 mb-2">
-              <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              <span>{t.mitreMatrixTitle}</span>
-            </h2>
-            <div className="text-xs text-slate-400 space-y-2">
-              <div className="flex justify-between items-center py-1 border-b border-slate-800 text-[11px]">
-                <span>T1190: Exploit Public App</span>
-                <span className="font-mono text-cyan-400">Active</span>
+          <div className="p-5 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-xl">
+            <div className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-3">
+              <h2 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
+                <ShieldCheck className="w-4 h-4 text-yellow-400" />
+                <span>{t.mitreMatrixTitle}</span>
+              </h2>
+              <span className="text-[10px] font-mono font-bold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.5 rounded border border-yellow-400/30">
+                v14.1
+              </span>
+            </div>
+            <div className="text-xs text-neutral-300 space-y-2">
+              <div className="flex justify-between items-center py-1.5 border-b border-neutral-800/80 text-[11px]">
+                <span className="font-medium text-white">T1190: Exploit Public App</span>
+                <span className="font-mono text-yellow-400 font-bold">Mitigated</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-800 text-[11px]">
-                <span>T1110: Brute Force</span>
-                <span className="font-mono text-cyan-400">Active</span>
+              <div className="flex justify-between items-center py-1.5 border-b border-neutral-800/80 text-[11px]">
+                <span className="font-medium text-white">T1110: Brute Force</span>
+                <span className="font-mono text-yellow-400 font-bold">Throttled</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-800 text-[11px]">
-                <span>T1490: Inhibit System Recovery</span>
-                <span className="font-mono text-cyan-400">Active</span>
+              <div className="flex justify-between items-center py-1.5 border-b border-neutral-800/80 text-[11px]">
+                <span className="font-medium text-white">T1490: Inhibit System Recovery</span>
+                <span className="font-mono text-yellow-400 font-bold">Guarded</span>
               </div>
-              <div className="flex justify-between items-center py-1 text-[11px]">
-                <span>T1071: Standard App Protocol C2</span>
-                <span className="font-mono text-cyan-400">Active</span>
+              <div className="flex justify-between items-center py-1.5 text-[11px]">
+                <span className="font-medium text-white">T1071: Standard App Protocol C2</span>
+                <span className="font-mono text-yellow-400 font-bold">Detected</span>
               </div>
             </div>
           </div>

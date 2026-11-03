@@ -90,39 +90,39 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
   const getStatusBadge = (status: Incident['status']) => {
     switch (status) {
       case 'new':
-        return <span className="text-[11px] font-semibold text-rose-400 bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 rounded">{t.newIncident}</span>;
+        return <span className="text-[11px] font-bold text-rose-300 bg-rose-500/20 border border-rose-500/40 px-2.5 py-0.5 rounded-full">{t.newIncident}</span>;
       case 'investigating':
-        return <span className="text-[11px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded">{t.investigating}</span>;
+        return <span className="text-[11px] font-bold text-yellow-300 bg-yellow-400/20 border border-yellow-400/40 px-2.5 py-0.5 rounded-full">{t.investigating}</span>;
       case 'contained':
-        return <span className="text-[11px] font-semibold text-sky-400 bg-sky-500/10 border border-sky-500/30 px-2 py-0.5 rounded">{t.contained}</span>;
+        return <span className="text-[11px] font-bold text-white bg-white/10 border border-white/30 px-2.5 py-0.5 rounded-full">{t.contained}</span>;
       case 'resolved':
-        return <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded">{t.resolved}</span>;
+        return <span className="text-[11px] font-bold text-emerald-300 bg-emerald-500/20 border border-emerald-500/40 px-2.5 py-0.5 rounded-full">{t.resolved}</span>;
     }
   };
 
   const getSeverityBadgeClass = (sev: Severity) => {
     switch (sev) {
       case 'critical':
-        return 'text-rose-400 border border-rose-500/30 bg-rose-500/10';
+        return 'text-rose-400 border border-rose-500/30 bg-rose-500/10 font-bold';
       case 'high':
-        return 'text-amber-400 border border-amber-500/30 bg-amber-500/10';
+        return 'text-yellow-400 border border-yellow-400/30 bg-yellow-400/10 font-bold';
       case 'medium':
-        return 'text-sky-400 border border-sky-500/30 bg-sky-500/10';
+        return 'text-amber-300 border border-amber-400/30 bg-amber-400/10';
       default:
-        return 'text-slate-400 border border-slate-700 bg-slate-800';
+        return 'text-neutral-400 border border-neutral-700 bg-neutral-800';
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-800 pb-5">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <ShieldAlert className="w-6 h-6 text-rose-400" />
+          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2.5 uppercase">
+            <ShieldAlert className="w-6 h-6 text-yellow-400 stroke-[2.5]" />
             <span>{t.incidentsTitle}</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-neutral-300 font-medium mt-1">
             {lang === 'pa'
               ? 'ਗੰਭੀਰ ਸੁਰੱਖਿਆ ਘਟਨਾਵਾਂ ਦੀ ਜਾਂਚ, AI ਫੋਰੈਂਸਿਕ ਰਿਪੋਰਟਿੰਗ ਅਤੇ ਕੰਟੇਨਮੈਂਟ ਪਲੇਬੁੱਕਸ'
               : 'Active security alerts, AI-driven threat triage, containment workflows, and forensic playbooks.'}
@@ -130,18 +130,18 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 text-xs font-mono">
-            <span className="text-slate-400">{incidents.length} incidents</span>
-            <span className="text-slate-600">·</span>
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono font-bold">
+            <span className="text-white">{incidents.length} incidents</span>
+            <span className="text-neutral-600">·</span>
             <span className="text-rose-400">{incidents.filter(i => i.severity === 'critical').length} Critical</span>
           </div>
 
           <button
             onClick={onExportPdfReport}
-            className="flex items-center gap-2 px-3.5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold rounded-lg shadow-sm shadow-cyan-900/30 transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-neutral-100 text-neutral-950 text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer"
             title="Download Official Incident PDF Report"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
             <span>{t.exportPdfButton}</span>
           </button>
         </div>
@@ -152,7 +152,7 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
         {/* Left Column (5 cols): Incident Queue */}
         <div className="lg:col-span-5 space-y-3">
           {incidents.length === 0 ? (
-            <div className="p-8 rounded-xl bg-slate-900/60 border border-slate-800 text-center text-xs text-slate-500">
+            <div className="p-8 rounded-2xl bg-neutral-900/60 border border-neutral-800 text-center text-xs text-neutral-400">
               {lang === 'pa' ? 'ਕੋਈ ਸਰਗਰਮ ਘਟਨਾ ਨਹੀਂ ਹੈ।' : 'No active incidents in queue.'}
             </div>
           ) : (
@@ -167,12 +167,12 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
                   }}
                   className={`p-4 rounded-xl border cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-slate-900 border-cyan-500/60 shadow-md shadow-cyan-950/20'
-                      : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                      ? 'bg-neutral-900 border-l-4 border-l-yellow-400 border-neutral-700 shadow-lg shadow-yellow-500/10'
+                      : 'bg-neutral-950 border-neutral-800 hover:border-yellow-400/40 hover:bg-neutral-900'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase ${getSeverityBadgeClass(incident.severity)}`}>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase ${getSeverityBadgeClass(incident.severity)}`}>
                       {incident.severity}
                     </span>
                     {getStatusBadge(incident.status)}
@@ -182,16 +182,16 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
                     {incident.title}
                   </h3>
 
-                  <div className="mt-2 text-[11px] text-slate-400 flex items-center gap-2 flex-wrap font-mono">
-                    <span className="text-cyan-400">{incident.attackerIp}</span>
-                    <span aria-hidden="true">·</span>
-                    <span className="text-slate-300">{incident.targetHost}</span>
-                    <span aria-hidden="true">·</span>
-                    <span className="text-indigo-400">MITRE {incident.mitreTechnique}</span>
+                  <div className="mt-2 text-[11px] text-neutral-400 flex items-center gap-2 flex-wrap font-mono">
+                    <span className="text-yellow-400 font-bold">{incident.attackerIp}</span>
+                    <span aria-hidden="true" className="text-neutral-600">·</span>
+                    <span className="text-white font-medium">{incident.targetHost}</span>
+                    <span aria-hidden="true" className="text-neutral-600">·</span>
+                    <span className="text-yellow-300 font-bold">MITRE {incident.mitreTechnique}</span>
                   </div>
 
-                  <div className="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 font-mono">
-                    <span>{incident.eventCount} correlated events</span>
+                  <div className="mt-2 pt-2 border-t border-neutral-800/80 flex items-center justify-between text-[11px] text-neutral-400 font-mono">
+                    <span className="text-neutral-300">{incident.eventCount} correlated events</span>
                     <span className="tabular-nums">{new Date(incident.createdTime).toLocaleTimeString()}</span>
                   </div>
                 </div>
@@ -203,19 +203,19 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
         {/* Right Column (7 cols): Selected Incident Forensic Workbench */}
         <div className="lg:col-span-7">
           {selectedIncident ? (
-            <div className="p-6 rounded-xl bg-slate-900/80 border border-slate-800 space-y-6">
+            <div className="p-6 rounded-2xl bg-neutral-900/90 border border-neutral-800 space-y-6 shadow-xl">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-slate-800 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-neutral-800 pb-4">
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase ${getSeverityBadgeClass(selectedIncident.severity)}`}>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase ${getSeverityBadgeClass(selectedIncident.severity)}`}>
                       {selectedIncident.severity}
                     </span>
-                    <span className="text-xs font-mono text-cyan-400">
+                    <span className="text-xs font-mono font-bold text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded border border-yellow-400/30">
                       MITRE ATT&CK: {selectedIncident.mitreTechnique} ({selectedIncident.mitreTactic})
                     </span>
                   </div>
-                  <h2 className="text-base font-bold text-white mt-2">
+                  <h2 className="text-base font-black text-white mt-2">
                     {selectedIncident.title}
                   </h2>
                 </div>
@@ -225,7 +225,7 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
                   <select
                     value={selectedIncident.status}
                     onChange={(e) => onUpdateStatus(selectedIncident.id, e.target.value as any)}
-                    className="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs font-semibold text-slate-200 focus:outline-none focus:border-cyan-500"
+                    className="px-3 py-1.5 bg-neutral-950 border border-neutral-800 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-yellow-400 cursor-pointer"
                   >
                     <option value="new">{t.newIncident}</option>
                     <option value="investigating">{t.investigating}</option>
@@ -235,21 +235,21 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
                 </div>
               </div>
 
-              {/* Key Indicators Strip */}
+              {/* Key Indicators Strip in High-Contrast White and Cyber Yellow */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono">
-                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-[11px] text-slate-500 font-sans">{lang === 'pa' ? 'ਹਮਲਾਵਰ IP' : 'Attacker IP'}</div>
-                  <div className="text-rose-400 font-bold mt-1 truncate">{selectedIncident.attackerIp}</div>
+                <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+                  <div className="text-[11px] text-neutral-400 font-sans font-medium">{lang === 'pa' ? 'ਹਮਲਾਵਰ IP' : 'Attacker IP'}</div>
+                  <div className="text-yellow-400 font-bold mt-1 truncate">{selectedIncident.attackerIp}</div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-[11px] text-slate-500 font-sans">{lang === 'pa' ? 'ਨਿਸ਼ਾਨਾ ਸਰਵਰ' : 'Target Asset'}</div>
-                  <div className="text-slate-200 font-semibold mt-1 truncate">{selectedIncident.targetHost}</div>
+                <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+                  <div className="text-[11px] text-neutral-400 font-sans font-medium">{lang === 'pa' ? 'ਨਿਸ਼ਾਨਾ ਸਰਵਰ' : 'Target Asset'}</div>
+                  <div className="text-white font-bold mt-1 truncate">{selectedIncident.targetHost}</div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-[11px] text-slate-500 font-sans">{lang === 'pa' ? 'ਘਟਨਾ ਸਮਾਂ' : 'Initial Detection'}</div>
-                  <div className="text-slate-300 mt-1 tabular-nums truncate">
+                <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+                  <div className="text-[11px] text-neutral-400 font-sans font-medium">{lang === 'pa' ? 'ਘਟਨਾ ਸਮਾਂ' : 'Initial Detection'}</div>
+                  <div className="text-neutral-300 mt-1 tabular-nums truncate">
                     {new Date(selectedIncident.createdTime).toLocaleTimeString()}
                   </div>
                 </div>
@@ -257,24 +257,26 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
 
               {/* Incident Description */}
               <div>
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-                  {lang === 'pa' ? 'ਫੋਰੈਂਸਿਕ ਵੇਰਵਾ' : 'Forensic Narrative & Context'}
+                <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+                  <span>{lang === 'pa' ? 'ਫੋਰੈਂਸਿਕ ਵੇਰਵਾ' : 'Forensic Narrative & Context'}</span>
                 </h3>
-                <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-300 leading-relaxed font-mono">
+                <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 text-xs text-neutral-200 leading-relaxed font-mono">
                   {selectedIncident.description}
                 </div>
               </div>
 
               {/* Recommended Actions */}
               <div>
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-                  {lang === 'pa' ? 'ਤੁਰੰਤ ਸਿਫਾਰਸ਼ ਕੀਤੇ ਐਕਸ਼ਨ' : 'Recommended SOC Playbook Actions'}
+                <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+                  <span>{lang === 'pa' ? 'ਤੁਰੰਤ ਸਿਫਾਰਸ਼ ਕੀਤੇ ਐਕਸ਼ਨ' : 'Recommended SOC Playbook Actions'}</span>
                 </h3>
                 <div className="space-y-2">
                   {selectedIncident.recommendedActions.map((action, i) => (
-                    <div key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
-                      <span className="text-cyan-400 font-mono font-bold">{i + 1}.</span>
-                      <span>{action}</span>
+                    <div key={i} className="flex items-start gap-2.5 text-xs text-neutral-200 bg-neutral-950 p-3 rounded-xl border border-neutral-800">
+                      <span className="text-yellow-400 font-mono font-black">{i + 1}.</span>
+                      <span className="leading-snug">{action}</span>
                     </div>
                   ))}
                 </div>
@@ -285,10 +287,10 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
                 <button
                   onClick={() => onBlockIp(selectedIncident.attackerIp)}
                   disabled={blockedIps.has(selectedIncident.attackerIp)}
-                  className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                     blockedIps.has(selectedIncident.attackerIp)
-                      ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                      : 'bg-rose-600 hover:bg-rose-500 text-white shadow-sm'
+                      ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
+                      : 'bg-rose-600 hover:bg-rose-500 text-white shadow-md'
                   }`}
                 >
                   <ShieldX className="w-3.5 h-3.5" />
@@ -299,22 +301,22 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
                   </span>
                 </button>
 
-                {/* AI Threat Copilot Trigger */}
+                {/* AI Threat Copilot Trigger in Cyber Yellow */}
                 <button
                   onClick={() => handleRunAiAnalysis(selectedIncident)}
                   disabled={loadingAi}
-                  className="px-3.5 py-2 rounded-lg text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white shadow-sm shadow-cyan-900/30 flex items-center gap-1.5 transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-yellow-400 hover:bg-yellow-300 text-neutral-950 shadow-md shadow-yellow-500/20 flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
                 >
-                  <Bot className="w-4 h-4" />
+                  <Bot className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
                   <span>{loadingAi ? t.generatingAnalysis : t.aiDeepDive}</span>
                 </button>
               </div>
 
               {/* AI Forensic Analysis Report Container */}
               {aiReport && (
-                <div className="p-4 rounded-xl bg-slate-950 border border-cyan-500/40 text-xs text-slate-200 space-y-3 animate-in fade-in">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                    <span className="text-cyan-400 font-semibold flex items-center gap-1.5">
+                <div className="p-4 rounded-xl bg-neutral-950 border border-yellow-400/40 text-xs text-neutral-100 space-y-3 animate-in fade-in shadow-xl">
+                  <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
+                    <span className="text-yellow-400 font-bold flex items-center gap-1.5">
                       <Bot className="w-4 h-4" />
                       <span>{lang === 'pa' ? 'AI ਫੋਰੈਂਸਿਕ ਜਾਂਚ ਰਿਪੋਰਟ' : 'AI SOC Forensic Briefing'}</span>
                     </span>
@@ -327,20 +329,20 @@ export const IncidentTriage: React.FC<IncidentTriageProps> = ({
                         a.download = `incident-${selectedIncident.id}-report.md`;
                         a.click();
                       }}
-                      className="text-[11px] text-slate-400 hover:text-white flex items-center gap-1"
+                      className="text-[11px] text-neutral-300 hover:text-white flex items-center gap-1 cursor-pointer font-semibold"
                     >
-                      <Download className="w-3 h-3" />
+                      <Download className="w-3 h-3 text-yellow-400" />
                       <span>{lang === 'pa' ? 'ਰਿਪੋਰਟ ਡਾਊਨਲੋਡ' : 'Download MD'}</span>
                     </button>
                   </div>
-                  <div className="prose prose-invert prose-xs max-w-none text-slate-300 leading-relaxed whitespace-pre-line font-sans">
+                  <div className="prose prose-invert prose-xs max-w-none text-neutral-200 leading-relaxed whitespace-pre-line font-sans">
                     {aiReport}
                   </div>
                 </div>
               )}
             </div>
           ) : (
-            <div className="p-12 rounded-xl bg-slate-900/60 border border-slate-800 text-center text-xs text-slate-500">
+            <div className="p-12 rounded-2xl bg-neutral-900/60 border border-neutral-800 text-center text-xs text-neutral-400">
               {lang === 'pa' ? 'ਵੇਰਵੇ ਦੇਖਣ ਲਈ ਖੱਬੇ ਪਾਸਿਓਂ ਕੋਈ ਘਟਨਾ ਚੁਣੋ' : 'Select an incident from the queue to view full forensic workbench'}
             </div>
           )}

@@ -81,49 +81,49 @@ export const LogDetailModal: React.FC<LogDetailModalProps> = ({
   const getSeverityBadgeClass = (sev: Severity) => {
     switch (sev) {
       case 'critical':
-        return 'text-rose-400 bg-rose-500/10 border-rose-500/30';
+        return 'text-rose-400 bg-rose-500/10 border-rose-500/30 font-bold';
       case 'high':
-        return 'text-amber-400 bg-amber-500/10 border-amber-500/30';
+        return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30 font-bold';
       case 'medium':
-        return 'text-sky-400 bg-sky-500/10 border-sky-500/30';
+        return 'text-amber-300 bg-amber-400/10 border-amber-400/30';
       default:
         return 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl p-6 space-y-6"
+        className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-neutral-900 border border-neutral-700 shadow-2xl p-6 space-y-6"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-headline"
       >
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 border-b border-slate-800 pb-4">
+        <div className="flex items-start justify-between gap-4 border-b border-neutral-800 pb-4">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`text-[11px] font-mono font-bold px-2.5 py-0.5 rounded border uppercase ${getSeverityBadgeClass(log.severity)}`}>
+              <span className={`text-[11px] font-mono px-2.5 py-0.5 rounded border uppercase ${getSeverityBadgeClass(log.severity)}`}>
                 {log.severity}
               </span>
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-xs font-mono text-neutral-400">
                 ID: {log.id}
               </span>
               {log.ruleMatched?.mitreId && (
-                <span className="text-xs font-mono text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/30">
+                <span className="text-xs font-mono font-bold text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded border border-yellow-400/30">
                   MITRE ATT&CK: {log.ruleMatched.mitreId} ({log.ruleMatched.mitreTactic})
                 </span>
               )}
             </div>
 
-            <h2 id="modal-headline" className="text-lg font-bold text-white mt-2">
+            <h2 id="modal-headline" className="text-lg font-black text-white mt-2">
               {log.ruleMatched?.name || `${log.category.toUpperCase()} Log Entry`}
             </h2>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -132,35 +132,36 @@ export const LogDetailModal: React.FC<LogDetailModalProps> = ({
 
         {/* Action feedback notification */}
         {actionFeedback && (
-          <div className="p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs">
+          <div className="p-3 rounded-xl bg-yellow-400/10 border border-yellow-400/30 text-yellow-300 text-xs font-medium">
             {actionFeedback}
           </div>
         )}
 
-        {/* Forensic Attributes Grid */}
+        {/* Forensic Attributes Grid in Cyber Yellow & Crisp White */}
         <div>
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-            {t.parsedAttributes}
+          <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+            <span>{t.parsedAttributes}</span>
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-              <div className="text-[11px] text-slate-500 font-sans">{t.tabularIp}</div>
-              <div className="text-cyan-400 font-bold mt-1 truncate">{log.sourceIp}</div>
+            <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+              <div className="text-[11px] text-neutral-400 font-sans font-medium">{t.tabularIp}</div>
+              <div className="text-yellow-400 font-black mt-1 truncate">{log.sourceIp}</div>
             </div>
 
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-              <div className="text-[11px] text-slate-500 font-sans">{t.tabularHost}</div>
-              <div className="text-slate-200 font-semibold mt-1 truncate">{log.sourceHost}</div>
+            <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+              <div className="text-[11px] text-neutral-400 font-sans font-medium">{t.tabularHost}</div>
+              <div className="text-white font-bold mt-1 truncate">{log.sourceHost}</div>
             </div>
 
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-              <div className="text-[11px] text-slate-500 font-sans">{lang === 'pa' ? 'ਯੂਜ਼ਰ' : 'User Identity'}</div>
-              <div className="text-amber-300 font-semibold mt-1 truncate">{log.user || 'SYSTEM / Anonymous'}</div>
+            <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+              <div className="text-[11px] text-neutral-400 font-sans font-medium">{lang === 'pa' ? 'ਯੂਜ਼ਰ' : 'User Identity'}</div>
+              <div className="text-yellow-300 font-bold mt-1 truncate">{log.user || 'SYSTEM / Anonymous'}</div>
             </div>
 
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-              <div className="text-[11px] text-slate-500 font-sans">{lang === 'pa' ? 'ਭਰੋਸਾ ਸਕੋਰ' : 'Detection Confidence'}</div>
-              <div className="text-emerald-400 font-bold mt-1 tabular-nums">{log.confidenceScore}%</div>
+            <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+              <div className="text-[11px] text-neutral-400 font-sans font-medium">{lang === 'pa' ? 'ਭਰੋਸਾ ਸਕੋਰ' : 'Detection Confidence'}</div>
+              <div className="text-emerald-400 font-black mt-1 tabular-nums">{log.confidenceScore}%</div>
             </div>
           </div>
         </div>
@@ -168,41 +169,42 @@ export const LogDetailModal: React.FC<LogDetailModalProps> = ({
         {/* Raw Payload Section */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              {t.rawMessage}
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+              <span>{t.rawMessage}</span>
             </h3>
             <button
               onClick={handleCopyRaw}
-              className="flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors"
+              className="flex items-center gap-1 text-xs text-neutral-300 hover:text-white transition-colors cursor-pointer font-bold"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-yellow-400" /> : <Copy className="w-3.5 h-3.5 text-yellow-400" />}
               <span>{copied ? (lang === 'pa' ? 'ਕਾਪੀ ਹੋ ਗਿਆ!' : 'Copied!') : (lang === 'pa' ? 'ਕਾਪੀ ਕਰੋ' : 'Copy Payload')}</span>
             </button>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-200 break-all leading-relaxed max-h-40 overflow-y-auto">
+          <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 font-mono text-xs text-neutral-200 break-all leading-relaxed max-h-40 overflow-y-auto">
             {log.raw}
           </div>
         </div>
 
         {/* Rule Logic & Remediation */}
         {log.ruleMatched && (
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3">
+          <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 space-y-3">
             <div>
-              <div className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <FileCode className="w-4 h-4 text-cyan-400" />
+              <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                <FileCode className="w-4 h-4 text-yellow-400" />
                 <span>{t.ruleDescription}</span>
               </div>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="text-xs text-neutral-300 mt-1 leading-relaxed">
                 {log.ruleMatched.description}
               </p>
             </div>
 
-            <div className="pt-2 border-t border-slate-800/80">
-              <div className="text-xs font-semibold text-rose-300 flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 text-rose-400" />
+            <div className="pt-2 border-t border-neutral-800">
+              <div className="text-xs font-bold text-yellow-300 flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4 text-yellow-400" />
                 <span>{t.recommendedRemediation}</span>
               </div>
-              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+              <p className="text-xs text-neutral-200 mt-1 leading-relaxed">
                 {log.ruleMatched.remediation}
               </p>
             </div>
@@ -210,7 +212,7 @@ export const LogDetailModal: React.FC<LogDetailModalProps> = ({
         )}
 
         {/* Incident Response Action Bar */}
-        <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <div className="pt-3 border-t border-neutral-800 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2 flex-wrap">
             {/* Block IP */}
             <button
@@ -223,13 +225,13 @@ export const LogDetailModal: React.FC<LogDetailModalProps> = ({
                 );
               }}
               disabled={isIpBlocked}
-              className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 isIpBlocked
-                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                  : 'bg-rose-600 hover:bg-rose-500 text-white shadow-sm'
+                  ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
+                  : 'bg-yellow-400 hover:bg-yellow-300 text-neutral-950 shadow-md shadow-yellow-500/20 active:scale-95'
               }`}
             >
-              <ShieldX className="w-3.5 h-3.5" />
+              <ShieldX className="w-3.5 h-3.5 text-neutral-950" />
               <span>{isIpBlocked ? (lang === 'pa' ? 'IP ਬਲਾਕਡ ਹੈ' : 'IP Blocked') : t.blockIp}</span>
             </button>
 
@@ -244,13 +246,13 @@ export const LogDetailModal: React.FC<LogDetailModalProps> = ({
                 );
               }}
               disabled={isHostIsolated}
-              className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 isHostIsolated
-                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                  : 'bg-amber-600 hover:bg-amber-500 text-white shadow-sm'
+                  ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
+                  : 'bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700'
               }`}
             >
-              <Server className="w-3.5 h-3.5" />
+              <Server className="w-3.5 h-3.5 text-white" />
               <span>{isHostIsolated ? (lang === 'pa' ? 'ਹੋਸਟ ਵੱਖ ਕੀਤਾ ਹੋਇਆ ਹੈ' : 'Host Isolated') : t.isolateHost}</span>
             </button>
 
@@ -264,25 +266,25 @@ export const LogDetailModal: React.FC<LogDetailModalProps> = ({
                     : 'New security incident ticket escalated and created!'
                 );
               }}
-              className="px-3 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm flex items-center gap-1.5 transition-colors"
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-white hover:bg-neutral-100 text-neutral-950 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
             >
-              <ShieldAlert className="w-3.5 h-3.5" />
+              <ShieldAlert className="w-3.5 h-3.5 text-neutral-950" />
               <span>{lang === 'pa' ? 'ਘਟਨਾ ਦਰਜ ਕਰੋ (Create Incident)' : 'Escalate to Incident'}</span>
             </button>
 
             {/* Export STIX */}
             <button
               onClick={handleExportStix}
-              className="px-3 py-2 rounded-lg text-xs font-medium text-slate-300 bg-slate-950 border border-slate-800 hover:border-slate-700 flex items-center gap-1.5 transition-colors"
+              className="px-3 py-2 rounded-xl text-xs font-semibold text-neutral-300 bg-neutral-950 border border-neutral-800 hover:border-yellow-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-3.5 h-3.5 text-yellow-400" />
               <span>{t.exportStix}</span>
             </button>
           </div>
 
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors ml-auto"
+            className="px-4 py-2 rounded-xl text-xs font-bold text-neutral-300 hover:text-white bg-neutral-800 hover:bg-neutral-700 transition-colors ml-auto cursor-pointer"
           >
             {t.close}
           </button>

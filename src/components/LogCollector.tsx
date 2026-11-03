@@ -124,36 +124,36 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Info */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-800 pb-5">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <Radio className="w-6 h-6 text-cyan-400" />
+          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2.5 uppercase">
+            <Radio className="w-6 h-6 text-yellow-400 stroke-[2.5]" />
             <span>{t.collectorTitle}</span>
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-neutral-300 font-medium mt-1">
             {t.collectorSubtitle}
           </p>
         </div>
 
-        {/* Global Stream Status / Action */}
+        {/* Global Stream Status / Action in Cyber Yellow & Crisp White */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsStreaming(!isStreaming)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer ${
               isStreaming
-                ? 'bg-amber-600/20 text-amber-300 border border-amber-500/40 hover:bg-amber-600/30'
-                : 'bg-emerald-600 text-white hover:bg-emerald-500'
+                ? 'bg-yellow-400 hover:bg-yellow-300 text-neutral-950 shadow-yellow-500/20'
+                : 'bg-white hover:bg-neutral-100 text-neutral-950'
             }`}
             aria-label={isStreaming ? t.pause : t.resume}
           >
             {isStreaming ? (
               <>
-                <Pause className="w-4 h-4" />
+                <Pause className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
                 <span>{t.pause}</span>
               </>
             ) : (
               <>
-                <Play className="w-4 h-4" />
+                <Play className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
                 <span>{t.resume}</span>
               </>
             )}
@@ -161,7 +161,7 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
 
           <button
             onClick={onClearLogs}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 bg-slate-900 border border-slate-800 hover:text-slate-200 hover:border-slate-700 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-neutral-300 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 hover:text-white transition-colors cursor-pointer"
             title="Clear all stored logs"
             aria-label={t.clearBuffer}
           >
@@ -173,55 +173,55 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
 
       {/* Collector Telemetry KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-yellow-400 shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{lang === 'pa' ? 'ਇੰਜੈਸ਼ਨ ਦਰ' : 'Ingestion Rate'}</span>
-            <Activity className="w-4 h-4 text-cyan-400" />
+            <Activity className="w-4 h-4 text-yellow-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-white">
-            {isStreaming ? (18 * streamSpeed) : 0} <span className="text-xs text-slate-400 font-sans font-normal">EPS</span>
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-white">
+            {isStreaming ? (18 * streamSpeed) : 0} <span className="text-xs text-neutral-400 font-sans font-normal">EPS</span>
           </div>
-          <div className="mt-1 text-xs text-slate-400 flex items-center gap-1.5">
-            <span className={`w-2 h-2 rounded-full ${isStreaming ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600'}`} />
+          <div className="mt-1 text-xs text-neutral-300 flex items-center gap-1.5 font-medium">
+            <span className={`w-2 h-2 rounded-full ${isStreaming ? 'bg-yellow-400 animate-ping' : 'bg-neutral-600'}`} />
             <span>{isStreaming ? t.streamRunning : t.streamPaused}</span>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-white shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{lang === 'pa' ? 'ਕੁੱਲ ਇਕੱਠੇ ਲੌਗਸ' : 'Total Ingested'}</span>
-            <Layers className="w-4 h-4 text-indigo-400" />
+            <Layers className="w-4 h-4 text-white" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-white">
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-white">
             {totalIngestedCount.toLocaleString()}
           </div>
-          <div className="mt-1 text-xs text-slate-400">
-            <span>{lang === 'pa' ? 'ਬਫਰ ਮੈਮੋਰੀ:' : 'Buffer Memory:'}</span> <span className="font-mono tabular-nums">4.2 MB</span>
+          <div className="mt-1 text-xs text-neutral-300">
+            <span>{lang === 'pa' ? 'ਬਫਰ ਮੈਮੋਰੀ:' : 'Buffer Memory:'}</span> <span className="font-mono tabular-nums font-semibold text-white">4.2 MB</span>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-rose-500 shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{lang === 'pa' ? 'ਖਤਰਨਾਕ ਫੜੇ ਗਏ' : 'Malicious Threats'}</span>
             <ShieldAlert className="w-4 h-4 text-rose-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-rose-400">
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-rose-400">
             {maliciousCount}
           </div>
-          <div className="mt-1 text-xs text-rose-300/80">
+          <div className="mt-1 text-xs text-rose-300 font-semibold">
             <span>{lang === 'pa' ? 'ਤੁਰੰਤ ਜਾਂਚ ਲੋੜੀਂਦੀ' : 'Requires immediate triage'}</span>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 border-t-2 border-t-yellow-400 shadow-md">
+          <div className="flex items-center justify-between text-xs text-neutral-400 font-medium">
             <span>{lang === 'pa' ? 'ਸ਼ੱਕੀ ਐਨੋਮਲੀਜ਼' : 'Suspicious Anomalies'}</span>
-            <Zap className="w-4 h-4 text-amber-400" />
+            <Zap className="w-4 h-4 text-yellow-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-amber-400">
+          <div className="mt-2 text-2xl sm:text-3xl font-black font-mono tabular-nums text-yellow-400">
             {suspiciousCount}
           </div>
-          <div className="mt-1 text-xs text-slate-400">
+          <div className="mt-1 text-xs text-neutral-300 font-medium">
             <span>{lang === 'pa' ? 'ਵਿਵਹਾਰਕ ਖੋਜ' : 'Behavioral analysis matches'}</span>
           </div>
         </div>
@@ -232,131 +232,131 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
         {/* Left Column (5 cols): Stream Control & Attack Scenario Presets */}
         <div className="lg:col-span-5 space-y-6">
           {/* Attack Scenario Injector */}
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-              <Zap className="w-4 h-4 text-cyan-400" />
+          <div className="p-5 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-xl">
+            <h2 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
+              <Zap className="w-4 h-4 text-yellow-400" />
               <span>{t.simulateAttack}</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-neutral-400 mt-1">
               {t.selectScenario}
             </p>
 
             <div className="mt-4 space-y-2.5">
               <button
                 onClick={() => onInjectScenario('sqli')}
-                className="w-full text-left p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-cyan-500/60 hover:bg-slate-900/70 transition-all flex items-center justify-between group"
+                className="w-full text-left p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-yellow-400 hover:bg-neutral-900 transition-all flex items-center justify-between group cursor-pointer"
               >
                 <div>
-                  <div className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300">
+                  <div className="text-xs font-bold text-white group-hover:text-yellow-300 transition-colors">
                     {t.scenarioSqli}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">
                     MITRE T1190 · SQL Injection & Directory Traversal
                   </div>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-rose-400 px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/20">
+                <span className="text-[10px] font-mono font-bold text-rose-300 px-2 py-0.5 rounded bg-rose-500/20 border border-rose-500/40">
                   CRITICAL
                 </span>
               </button>
 
               <button
                 onClick={() => onInjectScenario('ransom')}
-                className="w-full text-left p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-cyan-500/60 hover:bg-slate-900/70 transition-all flex items-center justify-between group"
+                className="w-full text-left p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-yellow-400 hover:bg-neutral-900 transition-all flex items-center justify-between group cursor-pointer"
               >
                 <div>
-                  <div className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300">
+                  <div className="text-xs font-bold text-white group-hover:text-yellow-300 transition-colors">
                     {t.scenarioRansom}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">
                     MITRE T1490 · Inhibit System Recovery & VSS deletion
                   </div>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-rose-400 px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/20">
+                <span className="text-[10px] font-mono font-bold text-rose-300 px-2 py-0.5 rounded bg-rose-500/20 border border-rose-500/40">
                   CRITICAL
                 </span>
               </button>
 
               <button
                 onClick={() => onInjectScenario('brute')}
-                className="w-full text-left p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-cyan-500/60 hover:bg-slate-900/70 transition-all flex items-center justify-between group"
+                className="w-full text-left p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-yellow-400 hover:bg-neutral-900 transition-all flex items-center justify-between group cursor-pointer"
               >
                 <div>
-                  <div className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300">
+                  <div className="text-xs font-bold text-white group-hover:text-yellow-300 transition-colors">
                     {t.scenarioBrute}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">
                     MITRE T1110 · Automated SSH / Bastion Password Spray
                   </div>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                <span className="text-[10px] font-mono font-bold text-yellow-300 px-2 py-0.5 rounded bg-yellow-400/20 border border-yellow-400/40">
                   HIGH
                 </span>
               </button>
 
               <button
                 onClick={() => onInjectScenario('c2')}
-                className="w-full text-left p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-cyan-500/60 hover:bg-slate-900/70 transition-all flex items-center justify-between group"
+                className="w-full text-left p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-yellow-400 hover:bg-neutral-900 transition-all flex items-center justify-between group cursor-pointer"
               >
                 <div>
-                  <div className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300">
+                  <div className="text-xs font-bold text-white group-hover:text-yellow-300 transition-colors">
                     {t.scenarioC2}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">
                     MITRE T1071 · Cobalt Strike Beaconing & Data Outflow
                   </div>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                <span className="text-[10px] font-mono font-bold text-yellow-300 px-2 py-0.5 rounded bg-yellow-400/20 border border-yellow-400/40">
                   HIGH
                 </span>
               </button>
 
               <button
                 onClick={() => onInjectScenario('portscan')}
-                className="w-full text-left p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-cyan-500/60 hover:bg-slate-900/70 transition-all flex items-center justify-between group"
+                className="w-full text-left p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-yellow-400 hover:bg-neutral-900 transition-all flex items-center justify-between group cursor-pointer"
               >
                 <div>
-                  <div className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300">
+                  <div className="text-xs font-bold text-white group-hover:text-yellow-300 transition-colors">
                     {t.scenarioPortScan}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">
                     MITRE T1046 · Perimeter Port Probing & SYN sweep
                   </div>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-sky-400 px-2 py-0.5 rounded bg-sky-500/10 border border-sky-500/20">
+                <span className="text-[10px] font-mono font-bold text-amber-300 px-2 py-0.5 rounded bg-amber-400/20 border border-amber-400/40">
                   MEDIUM
                 </span>
               </button>
 
               <button
                 onClick={() => onInjectScenario('benign')}
-                className="w-full text-left p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-slate-700 hover:bg-slate-900/50 transition-all flex items-center justify-between group"
+                className="w-full text-left p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 hover:bg-neutral-900 transition-all flex items-center justify-between group cursor-pointer"
               >
                 <div>
-                  <div className="text-xs font-semibold text-slate-300 group-hover:text-white">
+                  <div className="text-xs font-bold text-neutral-300 group-hover:text-white">
                     {t.scenarioBenign}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">
                     Clean enterprise authenticated traffic & asset queries
                   </div>
                 </div>
-                <span className="text-[10px] font-mono text-slate-400 px-2 py-0.5 rounded bg-slate-800 border border-slate-700">
+                <span className="text-[10px] font-mono font-bold text-neutral-300 px-2 py-0.5 rounded bg-neutral-800 border border-neutral-700">
                   CLEAN
                 </span>
               </button>
             </div>
 
             {/* Stream Speed Selector */}
-            <div className="mt-5 pt-4 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-400">{t.streamSpeed}:</span>
-              <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+            <div className="mt-5 pt-4 border-t border-neutral-800 flex items-center justify-between">
+              <span className="text-xs font-bold text-neutral-300">{t.streamSpeed}:</span>
+              <div className="flex items-center gap-1 bg-neutral-950 p-1 rounded-lg border border-neutral-800">
                 {[1, 2, 5].map((speed) => (
                   <button
                     key={speed}
                     onClick={() => setStreamSpeed(speed)}
-                    className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
+                    className={`px-3 py-1 text-xs font-mono rounded-md font-bold transition-all cursor-pointer ${
                       streamSpeed === speed
-                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-yellow-400 text-neutral-950 shadow-sm'
+                        : 'text-neutral-400 hover:text-white'
                     }`}
                   >
                     {speed}x
@@ -367,9 +367,9 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
           </div>
 
           {/* Active Collector Sources */}
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-              <Server className="w-4 h-4 text-cyan-400" />
+          <div className="p-5 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-xl">
+            <h2 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
+              <Server className="w-4 h-4 text-yellow-400" />
               <span>{t.activeSources}</span>
             </h2>
             <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
@@ -386,14 +386,14 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
                 <button
                   key={src}
                   onClick={() => toggleSource(src)}
-                  className={`p-2 rounded-lg border text-left flex items-center justify-between transition-colors ${
+                  className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
                     activeSources[src]
-                      ? 'bg-slate-950 border-cyan-500/40 text-slate-200'
-                      : 'bg-slate-950/40 border-slate-800/80 text-slate-500'
+                      ? 'bg-neutral-950 border-yellow-400/40 text-white font-medium'
+                      : 'bg-neutral-950/40 border-neutral-800 text-neutral-500'
                   }`}
                 >
                   <span className="truncate">{label}</span>
-                  <span className={`w-1.5 h-1.5 rounded-full ${activeSources[src] ? 'bg-cyan-400' : 'bg-slate-700'}`} />
+                  <span className={`w-2 h-2 rounded-full ${activeSources[src] ? 'bg-yellow-400 shadow-[0_0_6px_#facc15]' : 'bg-neutral-700'}`} />
                 </button>
               ))}
             </div>
@@ -402,37 +402,37 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
 
         {/* Right Column (7 cols): Manual Ingestion & Upload */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-                <FileText className="w-4 h-4 text-cyan-400" />
+          <div className="p-5 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-xl">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <h2 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
+                <FileText className="w-4 h-4 text-yellow-400" />
                 <span>{t.manualIngest}</span>
               </h2>
 
               {/* Sample Presets to quickly test */}
-              <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                <span className="hidden sm:inline text-[11px]">{lang === 'pa' ? 'ਨਮੂਨਾ ਲੋਡ ਕਰੋ:' : 'Load Sample:'}</span>
+              <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+                <span className="hidden sm:inline text-[11px] font-semibold text-neutral-300">{lang === 'pa' ? 'ਨਮੂਨਾ ਲੋਡ ਕਰੋ:' : 'Load Sample:'}</span>
                 <button
                   onClick={() => loadSamplePayload('sqli')}
-                  className="px-2 py-1 bg-slate-950 border border-slate-800 rounded text-[11px] text-cyan-300 hover:border-cyan-500 transition-colors"
+                  className="px-2.5 py-1 bg-neutral-950 border border-neutral-800 rounded-md text-[11px] font-mono text-yellow-300 hover:border-yellow-400 transition-colors cursor-pointer font-bold"
                 >
                   SQLi
                 </button>
                 <button
                   onClick={() => loadSamplePayload('ransom')}
-                  className="px-2 py-1 bg-slate-950 border border-slate-800 rounded text-[11px] text-rose-300 hover:border-rose-500 transition-colors"
+                  className="px-2.5 py-1 bg-neutral-950 border border-neutral-800 rounded-md text-[11px] font-mono text-rose-300 hover:border-rose-400 transition-colors cursor-pointer font-bold"
                 >
                   Ransomware
                 </button>
                 <button
                   onClick={() => loadSamplePayload('brute')}
-                  className="px-2 py-1 bg-slate-950 border border-slate-800 rounded text-[11px] text-amber-300 hover:border-amber-500 transition-colors"
+                  className="px-2.5 py-1 bg-neutral-950 border border-neutral-800 rounded-md text-[11px] font-mono text-yellow-300 hover:border-yellow-400 transition-colors cursor-pointer font-bold"
                 >
                   BruteForce
                 </button>
                 <button
                   onClick={() => loadSamplePayload('json')}
-                  className="px-2 py-1 bg-slate-950 border border-slate-800 rounded text-[11px] text-slate-300 hover:border-slate-600 transition-colors"
+                  className="px-2.5 py-1 bg-neutral-950 border border-neutral-800 rounded-md text-[11px] font-mono text-white hover:border-white transition-colors cursor-pointer font-bold"
                 >
                   JSON
                 </button>
@@ -441,8 +441,8 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
 
             {/* Success Banner */}
             {ingestSuccessMessage && (
-              <div className="mt-3 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+              <div className="mt-3 p-3 rounded-xl bg-yellow-400/10 border border-yellow-400/40 text-yellow-300 text-xs flex items-center gap-2 font-medium">
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-yellow-400" />
                 <span>{ingestSuccessMessage}</span>
               </div>
             )}
@@ -454,14 +454,14 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
                 onChange={(e) => setRawText(e.target.value)}
                 placeholder={t.pasteLogPlaceholder}
                 rows={9}
-                className="w-full rounded-lg bg-slate-950 border border-slate-800 p-3 text-xs font-mono text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-500 transition-colors"
+                className="w-full rounded-xl bg-neutral-950 border border-neutral-800 p-3.5 text-xs font-mono text-white placeholder:text-neutral-500 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400/50 transition-colors"
               />
             </div>
 
             {/* Actions: File upload & Ingest button */}
             <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <label className="w-full sm:w-auto flex items-center justify-center gap-2 px-3 py-2 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white rounded-lg text-xs cursor-pointer transition-colors">
-                <Upload className="w-4 h-4 text-cyan-400" />
+              <label className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-neutral-950 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-xl text-xs cursor-pointer transition-colors font-semibold">
+                <Upload className="w-4 h-4 text-yellow-400" />
                 <span>{t.uploadFile}</span>
                 <input
                   type="file"
@@ -474,24 +474,25 @@ export const LogCollector: React.FC<LogCollectorProps> = ({
               <button
                 onClick={handleManualIngest}
                 disabled={!rawText.trim()}
-                className={`w-full sm:w-auto px-5 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                className={`w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
                   rawText.trim()
-                    ? 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-sm shadow-cyan-900/30 cursor-pointer'
-                    : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                    ? 'bg-yellow-400 hover:bg-yellow-300 text-neutral-950 shadow-md shadow-yellow-500/20 active:scale-95 cursor-pointer'
+                    : 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
                 }`}
               >
-                <HardDrive className="w-4 h-4" />
+                <HardDrive className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
                 <span>{t.ingestButton}</span>
               </button>
             </div>
           </div>
 
           {/* Architecture / Ingestion Guide */}
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900 text-xs text-slate-400 space-y-2">
-            <div className="font-semibold text-slate-300">
-              {lang === 'pa' ? 'ਲੌਗ ਕੁਲੈਕਟਰ ਜਾਣਕਾਰੀ:' : 'Log Collector Pipeline Architecture:'}
+          <div className="p-4 rounded-2xl bg-neutral-950 border border-neutral-800 text-xs text-neutral-400 space-y-2">
+            <div className="font-bold text-white flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-yellow-400" />
+              <span>{lang === 'pa' ? 'ਲੌਗ ਕੁਲੈਕਟਰ ਜਾਣਕਾਰੀ:' : 'Log Collector Pipeline Architecture:'}</span>
             </div>
-            <p>
+            <p className="leading-relaxed">
               {lang === 'pa'
                 ? 'ਕੁਲੈਕਟਰ ਇੰਜਣ ਆਉਣ ਵਾਲੇ ਹਰ ਲੌਗ ਨੂੰ ਪਾਰਸ ਕਰਦਾ ਹੈ, ਸਰੋਤ IP, ਹੋਸਟ ਅਤੇ ਵਰਤੋਂਕਾਰ ਦੀ ਪਛਾਣ ਕਰਦਾ ਹੈ, ਅਤੇ MITRE ATT&CK ਤਕਨੀਕਾਂ ਨਾਲ ਮੈਚ ਕਰਕੇ ਸ਼ੱਕੀ/ਖਤਰਨਾਕ ਅਟੈਕਸ ਤੁਰੰਤ ਫਲੈਗ ਕਰਦਾ ਹੈ।'
                 : 'The AegisSOC collector pipeline ingests unstructured streams, extracts telemetry headers (IPv4, Host, Process, User), and evaluates live detection rules matching MITRE ATT&CK framework vectors.'}

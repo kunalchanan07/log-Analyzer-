@@ -66,28 +66,28 @@ export const SecurityAlertModal: React.FC<SecurityAlertModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in"
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="alert-dialog-title"
     >
-      <div className="relative w-full max-w-2xl rounded-2xl bg-slate-900 border-2 border-rose-500/80 shadow-2xl shadow-rose-950/40 p-6 space-y-5 text-slate-100">
-        {/* Header Alert Banner */}
-        <div className="flex items-start justify-between gap-4 border-b border-rose-500/30 pb-4">
+      <div className="relative w-full max-w-2xl rounded-2xl bg-neutral-900 border-2 border-yellow-400 shadow-2xl shadow-yellow-500/20 p-6 space-y-5 text-neutral-100">
+        {/* Header Alert Banner with Cyber Yellow Accent */}
+        <div className="flex items-start justify-between gap-4 border-b border-neutral-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-rose-400 shrink-0 animate-pulse">
-              <ShieldAlert className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-xl bg-yellow-400 text-neutral-950 font-black border border-yellow-300 flex items-center justify-center shrink-0 shadow-lg shadow-yellow-500/30">
+              <ShieldAlert className="w-6 h-6 stroke-[2.5]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded bg-rose-500 text-white">
+                <span className="text-[10px] font-mono font-black uppercase px-2 py-0.5 rounded bg-yellow-400 text-neutral-950 shadow-sm">
                   {lang === 'pa' ? 'ਗੰਭੀਰ ਸੁਰੱਖਿਆ ਚੇਤਾਵਨੀ' : 'CRITICAL THREAT ALERT'}
                 </span>
-                <span className="text-xs font-mono text-rose-400">
+                <span className="text-xs font-mono font-bold text-yellow-400">
                   {threatLog.severity.toUpperCase()}
                 </span>
               </div>
-              <h2 id="alert-dialog-title" className="text-base font-bold text-white mt-1">
+              <h2 id="alert-dialog-title" className="text-base font-black text-white mt-1">
                 {threatLog.ruleMatched?.name || `${threatLog.category.toUpperCase()} Attack Detected`}
               </h2>
             </div>
@@ -95,7 +95,7 @@ export const SecurityAlertModal: React.FC<SecurityAlertModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
             aria-label="Dismiss alert"
           >
             <X className="w-5 h-5" />
@@ -105,78 +105,78 @@ export const SecurityAlertModal: React.FC<SecurityAlertModalProps> = ({
         {/* Breakdown Grid: What, Where, Who */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
           {/* Who */}
-          <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-            <div className="text-[11px] text-slate-400 font-sans font-semibold flex items-center gap-1.5">
-              <Globe2 className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+            <div className="text-[11px] text-neutral-400 font-sans font-bold flex items-center gap-1.5">
+              <Globe2 className="w-3.5 h-3.5 text-yellow-400" />
               <span>{lang === 'pa' ? 'ਹਮਲਾਵਰ (Attacker)' : 'Threat Actor IP'}</span>
             </div>
-            <div className="text-rose-400 font-bold mt-1 text-sm">{threatLog.sourceIp}</div>
-            <div className="text-[10px] text-slate-400 mt-0.5">{geo.city}, {geo.country}</div>
+            <div className="text-yellow-400 font-black mt-1 text-sm">{threatLog.sourceIp}</div>
+            <div className="text-[10px] text-neutral-300 mt-0.5">{geo.city}, {geo.country}</div>
           </div>
 
           {/* Where */}
-          <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-            <div className="text-[11px] text-slate-400 font-sans font-semibold flex items-center gap-1.5">
-              <Server className="w-3.5 h-3.5 text-indigo-400" />
+          <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+            <div className="text-[11px] text-neutral-400 font-sans font-bold flex items-center gap-1.5">
+              <Server className="w-3.5 h-3.5 text-white" />
               <span>{lang === 'pa' ? 'ਨਿਸ਼ਾਨਾ (Target Host)' : 'Targeted Asset'}</span>
             </div>
-            <div className="text-white font-bold mt-1 text-sm">{threatLog.sourceHost}</div>
-            <div className="text-[10px] text-slate-400 mt-0.5 font-sans">
-              Source: <span className="uppercase">{threatLog.source}</span>
+            <div className="text-white font-black mt-1 text-sm">{threatLog.sourceHost}</div>
+            <div className="text-[10px] text-neutral-300 mt-0.5 font-sans">
+              Source: <span className="uppercase font-semibold">{threatLog.source}</span>
             </div>
           </div>
 
           {/* Technique */}
-          <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-            <div className="text-[11px] text-slate-400 font-sans font-semibold flex items-center gap-1.5">
-              <Terminal className="w-3.5 h-3.5 text-amber-400" />
+          <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800">
+            <div className="text-[11px] text-neutral-400 font-sans font-bold flex items-center gap-1.5">
+              <Terminal className="w-3.5 h-3.5 text-yellow-400" />
               <span>{lang === 'pa' ? 'ਤਕਨੀਕ (Technique)' : 'MITRE ATT&CK'}</span>
             </div>
-            <div className="text-amber-400 font-bold mt-1 text-sm">
+            <div className="text-yellow-400 font-black mt-1 text-sm">
               {threatLog.ruleMatched?.mitreId || 'T1190'}
             </div>
-            <div className="text-[10px] text-slate-400 mt-0.5 font-sans">
+            <div className="text-[10px] text-neutral-300 mt-0.5 font-sans font-medium">
               {threatLog.ruleMatched?.mitreTactic || threatLog.category}
             </div>
           </div>
         </div>
 
         {/* What was found (Forensic detail explanation) */}
-        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
-          <div className="font-semibold text-rose-300 flex items-center gap-1.5">
-            <AlertTriangle className="w-4 h-4 text-rose-400" />
+        <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 space-y-2 text-xs">
+          <div className="font-bold text-yellow-300 flex items-center gap-1.5">
+            <AlertTriangle className="w-4 h-4 text-yellow-400" />
             <span>
               {lang === 'pa' ? 'ਕੀ ਫੜਿਆ ਗਿਆ (Detected Security Risk):' : 'Forensic Detection Summary:'}
             </span>
           </div>
-          <p className="text-slate-300 leading-relaxed font-sans">
+          <p className="text-neutral-200 leading-relaxed font-sans">
             {threatLog.ruleMatched?.description || 
               `An unauthorized malicious payload matching known attack vectors was intercepted from ${threatLog.sourceIp} against internal asset ${threatLog.sourceHost}.`}
           </p>
 
-          <div className="mt-2 pt-2 border-t border-slate-800/80">
-            <div className="text-slate-400 font-semibold font-sans mb-1">
+          <div className="mt-2 pt-2 border-t border-neutral-800">
+            <div className="text-neutral-400 font-bold font-sans mb-1">
               {lang === 'pa' ? 'ਸਿਫਾਰਸ਼ ਕੀਤੀ ਤੁਰੰਤ ਕਾਰਵਾਈ (Remediation):' : 'Mandatory SOC Remediation:'}
             </div>
-            <p className="text-emerald-400 font-sans">
+            <p className="text-white font-sans font-medium">
               {threatLog.ruleMatched?.remediation || 'Immediately block IP at perimeter and isolate host via EDR.'}
             </p>
           </div>
         </div>
 
-        {/* Immediate Containment Actions */}
+        {/* Immediate Containment Actions with Yellow & White Contrast */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={() => onBlockIp(threatLog.sourceIp)}
               disabled={isIpBlocked}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 isIpBlocked
-                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                  : 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-950/30'
+                  ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
+                  : 'bg-yellow-400 hover:bg-yellow-300 text-neutral-950 shadow-md shadow-yellow-500/20 active:scale-95'
               }`}
             >
-              <ShieldX className="w-4 h-4" />
+              <ShieldX className="w-4 h-4 text-neutral-950" />
               <span>
                 {isIpBlocked ? (lang === 'pa' ? 'IP ਬਲਾਕਡ ਹੈ' : 'IP Already Blocked') : (lang === 'pa' ? 'IP ਤੁਰੰਤ ਬਲਾਕ ਕਰੋ' : 'Block Attacker IP')}
               </span>
@@ -185,13 +185,13 @@ export const SecurityAlertModal: React.FC<SecurityAlertModalProps> = ({
             <button
               onClick={() => onIsolateHost(threatLog.sourceHost)}
               disabled={isHostIsolated}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 isHostIsolated
-                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                  : 'bg-amber-600 hover:bg-amber-500 text-white shadow-md'
+                  ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
+                  : 'bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700'
               }`}
             >
-              <Server className="w-4 h-4" />
+              <Server className="w-4 h-4 text-white" />
               <span>
                 {isHostIsolated ? (lang === 'pa' ? 'ਹੋਸਟ ਵੱਖ ਕੀਤਾ ਹੋਇਆ ਹੈ' : 'Host Isolated') : (lang === 'pa' ? 'ਹੋਸਟ ਵੱਖ ਕਰੋ' : 'Isolate Host')}
               </span>
@@ -202,7 +202,7 @@ export const SecurityAlertModal: React.FC<SecurityAlertModalProps> = ({
                 onViewInForensics(threatLog);
                 onClose();
               }}
-              className="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-white hover:bg-neutral-100 text-neutral-950 transition-all shadow-sm cursor-pointer"
             >
               {lang === 'pa' ? 'ਵੇਰਵੇ ਦੇਖੋ' : 'Full Investigation'}
             </button>
@@ -210,7 +210,7 @@ export const SecurityAlertModal: React.FC<SecurityAlertModalProps> = ({
 
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition-colors"
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white transition-colors cursor-pointer"
           >
             {lang === 'pa' ? 'ਮੰਨਿਆ (Acknowledge)' : 'Acknowledge & Close'}
           </button>

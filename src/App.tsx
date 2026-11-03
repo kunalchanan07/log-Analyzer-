@@ -501,8 +501,8 @@ export default function App() {
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-200 ${
       theme === 'dark' 
-        ? 'bg-slate-950 text-slate-100 dark' 
-        : 'bg-slate-50 text-slate-900 light'
+        ? 'bg-neutral-950 text-neutral-100 dark cyber-grid' 
+        : 'bg-white text-neutral-900 light'
     }`}>
       {/* Top Bar adhering to 3-zone standard */}
       <TopBar
@@ -595,18 +595,18 @@ export default function App() {
 
       {/* Side-Panel Log Ingest Drawer */}
       {isCollectorDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/70 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-2xl bg-slate-900 border-l border-slate-800 h-full p-6 overflow-y-auto space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-md animate-in fade-in">
+          <div className="w-full max-w-2xl bg-neutral-900 border-l border-neutral-800 h-full p-6 overflow-y-auto space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
               <div className="flex items-center gap-2">
-                <Radio className="w-5 h-5 text-cyan-400" />
-                <h2 className="text-base font-bold text-white">
+                <Radio className="w-5 h-5 text-yellow-400" />
+                <h2 className="text-base font-black uppercase tracking-wide text-white">
                   {lang === 'pa' ? 'ਸਾਈਡ ਲੌਗ ਕਲੈਕਟਰ' : 'Side Log Ingestion Drawer'}
                 </h2>
               </div>
               <button
                 onClick={() => setIsCollectorDrawerOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
+                className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 cursor-pointer transition-colors"
                 aria-label="Close drawer"
               >
                 <X className="w-5 h-5" />
